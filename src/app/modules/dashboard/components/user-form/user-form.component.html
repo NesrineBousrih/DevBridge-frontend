@@ -1,0 +1,60 @@
+<div class="user-form-container">
+  <h2>{{ isEditMode ? "Edit User" : "Add New User" }}</h2>
+
+  <form [formGroup]="userForm" (ngSubmit)="onSubmit()" class="form-container">
+    <div class="form-group">
+      <label for="username">Username</label>
+      <input
+        type="text"
+        id="username"
+        formControlName="username"
+        class="form-control"
+        [class.is-invalid]="
+          userForm.get('username')?.invalid && userForm.get('username')?.touched
+        "
+      />
+      @if (userForm.get('username')?.invalid &&
+      userForm.get('username')?.touched) {
+      <div class="error-message">
+        @if (userForm.get('username')?.errors?.['required']) {
+        <span>Username is required</span>
+        } @if (userForm.get('username')?.errors?.['minlength']) {
+        <span>Username must be at least 3 characters</span>
+        }
+      </div>
+      }
+    </div>
+
+    <div class="form-group">
+      <label for="password">Password</label>
+      <input
+        type="password"
+        id="password"
+        formControlName="password"
+        class="form-control"
+        [class.is-invalid]="
+          userForm.get('password')?.invalid && userForm.get('password')?.touched
+        "
+      />
+      @if (userForm.get('password')?.invalid &&
+      userForm.get('password')?.touched) {
+      <div class="error-message">
+        @if (userForm.get('password')?.errors?.['required']) {
+        <span>Password is required</span>
+        } @if (userForm.get('password')?.errors?.['minlength']) {
+        <span>Password must be at least 6 characters</span>
+        }
+      </div>
+      }
+    </div>
+
+    <div class="button-group">
+      <button type="button" class="cancel-btn" routerLink="/dashboard/users">
+        Cancel
+      </button>
+      <button type="submit" class="submit-btn" [disabled]="userForm.invalid">
+        {{ isEditMode ? "Update User" : "Add User" }}
+      </button>
+    </div>
+  </form>
+</div>

@@ -1,0 +1,103 @@
+<div class="framework-form-container">
+  <h2>{{ isEditMode ? "Edit Framework" : "Add New Framework" }}</h2>
+
+  <form
+    [formGroup]="frameworkForm"
+    (ngSubmit)="onSubmit()"
+    class="form-container"
+  >
+    <div class="form-group">
+      <label for="name">Framework Name</label>
+      <input
+        type="text"
+        id="name"
+        formControlName="name"
+        class="form-control"
+        [class.is-invalid]="
+          frameworkForm.get('name')?.invalid &&
+          frameworkForm.get('name')?.touched
+        "
+      />
+      @if (frameworkForm.get('name')?.invalid &&
+      frameworkForm.get('name')?.touched) {
+      <div class="error-message">
+        @if (frameworkForm.get('name')?.errors?.['required']) {
+        <span>Framework name is required</span>
+        } @if (frameworkForm.get('name')?.errors?.['minlength']) {
+        <span>Framework name must be at least 3 characters</span>
+        }
+      </div>
+      }
+      <div class="form-group">
+        <label for="short_description">Short Description</label>
+        <textarea
+          id="short_description"
+          formControlName="short_description"
+          class="form-control"
+          rows="3"
+          [class.is-invalid]="
+            frameworkForm.get('short_description')?.invalid &&
+            frameworkForm.get('short_description')?.touched
+          "
+        ></textarea>
+        @if (frameworkForm.get('short_description')?.invalid &&
+        frameworkForm.get('short_description')?.touched) {
+        <div class="error-message">
+          @if (frameworkForm.get('short_description')?.errors?.['required']) {
+          <span>Short description is required</span>
+          } @if (frameworkForm.get('short_description')?.errors?.['minlength'])
+          {
+          <span>Short description must be at least 10 characters</span>
+          }
+        </div>
+        
+        }
+        <div class="form-group">
+          <label for="logo">Framework Logo</label>
+          <input
+            type="file"
+            id="logo"
+            formControlName="logo"
+            class="form-control"
+            accept="image/*"
+            (change)="onFileChange($event)"
+          />
+          <div class="preview-container" *ngIf="logoPreview">
+            <img [src]="logoPreview" alt="Logo preview" class="logo-preview" />
+          </div>
+          @if (frameworkForm.get('logo')?.invalid && frameworkForm.get('logo')?.touched) {
+            <div class="error-message">
+              @if (frameworkForm.get('logo')?.errors?.['required']) {
+                <span>Framework logo is required</span>
+              }
+            </div>
+          }
+        </div>
+        
+      </div>
+    </div>
+
+    
+
+    <div class="button-group">
+      <button
+        type="button"
+        class="cancel-btn"
+        routerLink="/dashboard/frameworks"
+      >
+        Cancel
+      </button>
+      <button
+        type="submit"
+        class="submit-btn"
+        [disabled]="frameworkForm.invalid || loading"
+      >
+        @if (loading) {
+        <span>Processing...</span>
+        } @else {
+        <span>{{ isEditMode ? "Update Framework" : "Add Framework" }}</span>
+        }
+      </button>
+    </div>
+  </form>
+</div>

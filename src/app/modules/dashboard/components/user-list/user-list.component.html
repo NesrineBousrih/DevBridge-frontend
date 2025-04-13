@@ -1,0 +1,93 @@
+<div class="users-management-container">
+  <div class="header">
+    <h1>Users Management</h1>
+    <button class="add-user-btn" [routerLink]="['/dashboard/users/add']">
+      <i class="fa fa-user-plus"></i> Add User
+    </button>
+  </div>
+
+  <div class="search-container">
+    <input
+      type="text"
+      placeholder="Search by username"
+      (input)="onSearch($event)"
+    />
+    <i class="fa fa-search search-icon"></i>
+  </div>
+
+  <div class="tabs">
+    <button [class.active]="selectedTab === 'All'" (click)="selectTab('All')">
+      All Users
+    </button>
+  </div>
+
+  <!-- Confirmation Dialog -->
+  <div class="confirm-dialog-overlay" *ngIf="showConfirmDialog">
+    <div class="confirm-dialog">
+      <h3>Confirm Delete</h3>
+      <p>
+        Are you sure you want to delete this user? This action cannot be undone.
+      </p>
+      <div class="confirm-dialog-buttons">
+        <button class="btn cancel-btn" (click)="cancelDelete()">Cancel</button>
+        <button class="btn confirm-btn" (click)="confirmDelete()">
+          Delete
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="users-table">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Username</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (user of filteredUsers; track user.id) {
+        <tr>
+          <td>{{ user.id }}</td>
+          <td>{{ user.username }}</td>
+          <td class="actions">
+            <button
+              class="btn details-btn"
+              [routerLink]="['/dashboard/users', user.id]"
+            >
+              See details
+            </button>
+            <button
+              class="btn modify-btn"
+              [routerLink]="['/dashboard/users/edit', user.id]"
+            >
+              Modify
+            </button>
+            <button
+              class="btn delete-btn"
+              (click)="openConfirmDialog(user.id!)"
+            >
+              Delete
+            </button>
+          </td>
+        </tr>
+        } @empty {
+        <tr>
+          <td colspan="3" class="no-data">No users found</td>
+        </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <div class="pagination">
+    <button class="pagination-btn">
+      <i class="fa fa-angle-left"></i> Previous
+    </button>
+    <span class="current-page">1</span>
+    <button class="pagination-btn">
+      Next <i class="fa fa-angle-right"></i>
+    </button>
+  </div>
+</div>

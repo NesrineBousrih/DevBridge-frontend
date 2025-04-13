@@ -1,0 +1,23 @@
+<div class="sidebar-container">
+    <nav class="sidebar" [ngClass]="{'collapsed': isSidebarCollapsed}">
+      <button class="toggle-btn" (click)="toggleSidebar()">
+        <lucide-icon
+          [name]="isSidebarCollapsed ? menuIcon : closeIcon"
+          [size]="24"
+        ></lucide-icon>
+      </button>
+      
+      <ul>
+        <li *ngFor="let item of menuItems">
+          <a [routerLink]="item.route">
+            <lucide-icon
+              [name]="item.icon"
+              [size]="24"
+            ></lucide-icon>
+            <span>{{ item.label }}</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+ 

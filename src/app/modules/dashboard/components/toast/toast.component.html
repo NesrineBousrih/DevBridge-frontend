@@ -1,0 +1,17 @@
+<!-- src/app/shared/components/toast/toast.component.html -->
+<div class="toast-container">
+    @for (toast of toasts; track toast.id) {
+      <div class="toast toast-{{toast.type}}" [ngClass]="{ 'show': toast.visible }">
+        <div class="toast-content">
+          <i class="toast-icon" [ngClass]="{
+            'fa fa-check-circle': toast.type === 'success',
+            'fa fa-exclamation-circle': toast.type === 'error',
+            'fa fa-info-circle': toast.type === 'info',
+            'fa fa-warning': toast.type === 'warning'
+          }"></i>
+          <span class="toast-message">{{toast.message}}</span>
+        </div>
+      </div>
+    }
+  </div>
+  

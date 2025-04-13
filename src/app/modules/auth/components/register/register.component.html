@@ -1,0 +1,46 @@
+<div id="container">
+    <form [formGroup]="registerFormGroup" (ngSubmit)="register()">
+      <h3>Register</h3>
+  
+      <mat-form-field appearance="outline">
+        <mat-label>Username</mat-label>
+        <input matInput formControlName="username" required>
+        <mat-error *ngIf="isFieldInvalid('username')">
+          {{ getErrorMessage('username') }}
+        </mat-error>
+      </mat-form-field>
+  
+      <mat-form-field appearance="outline">
+        <mat-label>Email</mat-label>
+        <input matInput formControlName="email" required>
+        <mat-error *ngIf="isFieldInvalid('email')">
+          {{ getErrorMessage('email') }}
+        </mat-error>
+      </mat-form-field>
+  
+      <mat-form-field appearance="outline">
+        <mat-label>Password</mat-label>
+        <input matInput type="password" formControlName="password" required>
+        <mat-error *ngIf="isFieldInvalid('password')">
+          {{ getErrorMessage('password') }}
+        </mat-error>
+      </mat-form-field>
+  
+      <mat-form-field appearance="outline">
+        <mat-label>Confirm Password</mat-label>
+        <input matInput type="password" formControlName="confirmPassword" required>
+        <mat-error *ngIf="isFieldInvalid('confirmPassword')">
+          {{ getErrorMessage('confirmPassword') }}
+        </mat-error>
+      </mat-form-field>
+  
+      <button 
+        mat-flat-button 
+        [disabled]="registerFormGroup.invalid" 
+        type="submit"
+        color="primary"
+      >
+        Register
+      </button>
+    </form>
+  </div>

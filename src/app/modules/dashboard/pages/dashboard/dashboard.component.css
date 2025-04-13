@@ -1,0 +1,28 @@
+.dashboard-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 100%;
+}
+
+.main-layout {
+  display: flex;
+  flex: 1;
+}
+
+.content {
+  flex: 1;
+  padding: 20px;
+  background-color: #ecf0f1;
+}
+/* dashboard.component.css */
+.dashboard-content {
+  display: flex;
+  height: 100%;
+  width: 100%;
+}
+
+.content-area {
+  flex-grow: 1;
+  padding: 20px;
+}

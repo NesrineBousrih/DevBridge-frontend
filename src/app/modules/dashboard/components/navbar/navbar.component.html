@@ -1,0 +1,47 @@
+<div class="navbar">
+  <div class="navbar-brand">
+    <h1>Dashboard</h1>
+  </div>
+  
+  <div class="nav-links">
+    <div class="nav-item">
+      
+    </div>
+    
+    <!-- Add more nav items as needed -->
+  </div>
+
+  <div class="navbar-right">
+    <div class="dropdown user-dropdown">
+      <button class="dropdown-toggle">
+        <lucide-icon
+          [name]="userIcon"
+          [size]="20"
+        ></lucide-icon>
+        <span>{{ user.username || 'User' }}</span>
+      </button>
+      <div class="dropdown-menu">
+        <a href="/profile">
+          <lucide-icon [name]="userIcon" [size]="18"></lucide-icon>
+          Profile
+        </a>
+        <a href="/settings">
+          <lucide-icon [name]="settingsIcon" [size]="18"></lucide-icon>
+          Settings
+        </a>
+        <button (click)="logout()" class="logout-btn">
+          <lucide-icon [name]="logoutIcon" [size]="18"></lucide-icon>
+          logout
+        </button>
+      </div>
+    </div>
+    
+    <div class="notification-icon">
+      <lucide-icon
+        [name]="bellIcon"
+        [size]="20"
+      ></lucide-icon>
+      <span class="badge" *ngIf="notifications.length > 0">{{ notifications.length }}</span>
+    </div>
+  </div>
+</div>

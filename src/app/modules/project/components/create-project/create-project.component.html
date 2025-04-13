@@ -1,0 +1,235 @@
+<div class="project-wizard-container">
+  <!-- Step Indicator -->
+  <div class="step-indicator">
+    <div
+      class="step-item"
+      [ngClass]="{ active: currentStep >= 1, completed: currentStep > 1 }"
+    >
+      <div class="step-number">1</div>
+      <div class="step-title">Project Type</div>
+    </div>
+    <div class="step-line" [ngClass]="{ completed: currentStep > 1 }"></div>
+    <div
+      class="step-item"
+      [ngClass]="{ active: currentStep >= 2, completed: currentStep > 2 }"
+    >
+      <div class="step-number">2</div>
+      <div class="step-title">Framework</div>
+    </div>
+    <div class="step-line" [ngClass]="{ completed: currentStep > 2 }"></div>
+    <div class="step-item" [ngClass]="{ active: currentStep >= 3 }">
+      <div class="step-number">3</div>
+      <div class="step-title">Model</div>
+    </div>
+  </div>
+
+  <!-- Step Content -->
+  <div class="step-content">
+    <!-- Step 1: Project Type -->
+    <div *ngIf="currentStep === 1" class="step-panel">
+      <h2>Choose Project Type</h2>
+      <p class="step-description">
+        Select whether you want to create a frontend or backend project
+      </p>
+
+      <div class="project-type-options">
+        <div
+          class="project-type-card"
+          [ngClass]="{ selected: projectType === 'Frontend' }"
+          (click)="selectProjectType('Frontend')"
+        >
+          <div class="icon-container">
+            <lucide-icon [name]="codeIcon" [size]="50"></lucide-icon>
+          </div>
+          <h3>Frontend</h3>
+          <p>Create user interface components and applications</p>
+        </div>
+
+        <div
+          class="project-type-card"
+          [ngClass]="{ selected: projectType === 'Backend' }"
+          (click)="selectProjectType('Backend')"
+        >
+          <div class="icon-container">
+            <lucide-icon [name]="serverIcon" [size]="50"></lucide-icon>
+          </div>
+          <h3>Backend</h3>
+          <p>Build APIs, services and database models</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 2: Framework Selection -->
+    <div *ngIf="currentStep === 2" class="step-panel">
+      <h2>Select a Framework</h2>
+      <p class="step-description">
+        Choose the framework you want to use for your project
+      </p>
+
+      <div *ngIf="isLoading" class="loading-indicator">
+        <div class="spinner"></div>
+        <p>Loading frameworks...</p>
+      </div>
+
+      <div *ngIf="errorMessage" class="error-message">
+        {{ errorMessage }}
+        <button (click)="fetchFrameworks(projectType!)" class="retry-button">
+          Retry
+        </button>
+      </div>
+
+      <div *ngIf="!isLoading && !errorMessage" class="framework-grid">
+        <div
+          *ngFor="let framework of getFrameworks(projectType)"
+          class="framework-card"
+          [ngClass]="{ selected: selectedFramework?.id === framework.id }"
+          (click)="selectFramework(framework)"
+        >
+          <div class="framework-logo">
+            <img [src]="framework.logo" [alt]="framework.name" />
+          </div>
+          <div class="framework-info">
+            <h3>{{ framework.name }}</h3>
+            <p>{{ framework.short_description }}</p>
+          </div>
+        </div>
+      </div>
+
+      <div
+        *ngIf="
+          !isLoading && !errorMessage && getFrameworks(projectType).length === 0
+        "
+        class="no-frameworks"
+      >
+        No frameworks available for this project type.
+      </div>
+    </div>
+
+    <!-- Step 3: Model Definition -->
+    <div *ngIf="currentStep === 3" class="step-panel">
+      <h2>Define Your Model</h2>
+      <p class="step-description">
+        Add fields to your data model for {{ selectedFramework?.name }}
+      </p>
+
+      <form [formGroup]="modelForm">
+        <div class="form-group">
+          <label for="projectName">Project Name</label>
+          <input
+            type="text"
+            id="projectName"
+            formControlName="projectName"
+            placeholder="Enter project name"
+          />
+          <div
+            *ngIf="
+              modelForm.get('projectName')?.invalid &&
+              modelForm.get('projectName')?.touched
+            "
+            class="validation-error"
+          >
+            Project name is required
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="modelName">Model Name</label>
+          <input
+            type="text"
+            id="modelName"
+            formControlName="modelName"
+            placeholder="Enter model name"
+          />
+          <div
+            *ngIf="
+              modelForm.get('modelName')?.invalid &&
+              modelForm.get('modelName')?.touched
+            "
+            class="validation-error"
+          >
+            Model name is required
+          </div>
+        </div>
+
+        <div class="model-fields-container">
+          <div class="model-fields-header">
+            <h3>Model Fields</h3>
+            <button type="button" class="add-field-btn" (click)="addField()">
+              Add Field
+            </button>
+          </div>
+
+          <div formArrayName="fields">
+            <div
+              *ngFor="let field of fields.controls; let i = index"
+              [formGroupName]="i"
+              class="field-row"
+            >
+              <input
+                type="text"
+                formControlName="name"
+                placeholder="Field name"
+              />
+              <select formControlName="type">
+                <option *ngFor="let type of fieldTypes" [value]="type">
+                  {{ type }}
+                </option>
+              </select>
+              <button
+                type="button"
+                class="remove-field-btn"
+                (click)="removeField(i)"
+              >
+                Remove
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="project-summary">
+          <h3>Project Summary</h3>
+          <div class="summary-content">
+            <p><strong>Project Type:</strong> {{ projectType }}</p>
+            <p><strong>Framework:</strong> {{ selectedFramework?.name }}</p>
+            <p><strong>Number of Fields:</strong> {{ fields.length }}</p>
+          </div>
+        </div>
+
+        <div class="create-project-btn-container">
+          <button
+            type="button"
+            class="create-project-btn"
+            (click)="createProject()"
+          >
+            <lucide-icon [name]="checkCircleIcon"></lucide-icon>
+            Create Project
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Navigation Buttons -->
+  <div class="navigation-buttons">
+    <button *ngIf="currentStep > 1" class="back-btn" (click)="prevStep()">
+      <lucide-icon [name]="chevronLeftIcon"></lucide-icon>
+      Back
+    </button>
+    <button
+      *ngIf="currentStep < 3 && projectType && currentStep !== 2"
+      class="next-btn"
+      (click)="nextStep()"
+    >
+      Next
+      <lucide-icon [name]="chevronRightIcon"></lucide-icon>
+    </button>
+    <button
+      *ngIf="currentStep === 2 && selectedFramework"
+      class="next-btn"
+      (click)="nextStep()"
+    >
+      Next
+      <lucide-icon [name]="chevronRightIcon"></lucide-icon>
+    </button>
+  </div>
+</div>

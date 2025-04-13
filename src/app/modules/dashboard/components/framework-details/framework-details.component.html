@@ -1,0 +1,49 @@
+<div class="framework-detail-container">
+  <div class="framework-detail-card">
+    <div class="card-header">
+      <h2>Framework Details</h2>
+      <div class="button-group">
+        <button class="back-btn" (click)="goBack()">
+          <i class="fa fa-arrow-left"></i> Back
+        </button>
+      </div>
+    </div>
+
+    @if (loading) {
+    <div class="loading">Loading framework details...</div>
+    } @if (error) {
+    <div class="error-message">
+      {{ error }}
+    </div>
+    } @if (framework && !loading) {
+    <div class="framework-info">
+      <div class="info-group">
+        <span class="label">ID:</span>
+        <span class="value">{{ framework.id }}</span>
+      </div>
+
+      <div class="info-group">
+        <span class="label">Name:</span>
+        <span class="value">{{ framework.name }}</span>
+      </div>
+
+      <div class="info-group">
+        <span class="label">Description:</span>
+        <span class="value">{{
+          framework.short_description 
+        }}</span>
+      </div>
+    </div>
+    
+    } @if (framework && !loading) {
+    <div class="action-buttons">
+      <button class="edit-btn" (click)="onEdit()">
+        <i class="fa fa-edit"></i> Edit Framework
+      </button>
+      <button class="delete-btn" (click)="onDelete()">
+        <i class="fa fa-trash"></i> Delete Framework
+      </button>
+    </div>
+    }
+  </div>
+</div>

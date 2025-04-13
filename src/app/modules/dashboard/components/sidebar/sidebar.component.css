@@ -1,0 +1,73 @@
+/* sidebar.component.css */
+.sidebar-container {
+  height: 100vh;
+  display: flex;
+}
+
+.toggle-btn {
+  position: absolute;
+  top: 10px;
+  right: -15px;
+  z-index: 100;
+  background-color: #1b2931;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+  transition: right 0.3s ease;
+}
+
+.sidebar {
+  position: relative;
+  width: 250px;
+  height: 100vh;
+  background-color: #34495e;
+  color: white;
+  padding: 15px;
+  transition: all 0.3s ease;
+}
+
+.sidebar.collapsed {
+  width: 60px;
+  padding: 15px 5px;
+}
+
+.sidebar ul {
+  list-style-type: none;
+  padding: 0;
+  margin-top: 20px;
+}
+
+.sidebar ul li {
+  padding: 10px;
+  margin-bottom: 5px;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+
+.sidebar ul li a {
+  color: white;
+  text-decoration: none;
+  display: flex;
+  gap: 5px;
+  align-items: center;
+}
+
+.sidebar.collapsed ul li a span {
+  opacity: 0;
+  width: 0;
+  display: none;
+}
+.sidebar ul li a span {
+  font-size: medium;
+}
+
+.sidebar ul li a:hover {
+  background-color: #34495e;
+}

@@ -1,0 +1,68 @@
+<!-- home.component.html -->
+<div class="home-container">
+    <header class="header">
+      <div class="logo">
+        <h1>Project Management</h1>
+      </div>
+      <div class="search-bar">
+        <lucide-icon [name]="searchIcon"></lucide-icon>
+        <input 
+          type="text" 
+          placeholder="Search projects..." 
+          (input)="searchProjects($event)"
+        >
+      </div>
+    </header>
+  
+    <main>
+      <div class="projects-header">
+        <h2>My Projects</h2>
+        <button class="create-btn" (click)="createNewProject()">
+          <lucide-icon [name]="plusIcon"></lucide-icon>
+          Create project
+        </button>
+      </div>
+  
+      <div class="empty-state" *ngIf="filteredProjects.length === 0 && !searchQuery">
+        <lucide-icon [name]="folderPlusIcon" [size]="64"></lucide-icon>
+        <h3>You don't have any projects yet</h3>
+        <p>Start by creating your first project</p>
+        <button class="create-btn" (click)="createNewProject()">
+          <lucide-icon [name]="plusIcon"></lucide-icon>
+          Create project
+        </button>
+      </div>
+  
+      <div class="no-results" *ngIf="filteredProjects.length === 0 && searchQuery">
+        <h3>No results found for "{{ searchQuery }}"</h3>
+        <p>Try with different terms or create a new project</p>
+      </div>
+  
+      <div class="projects-grid" *ngIf="filteredProjects.length > 0">
+        <div class="project-card" *ngFor="let project of filteredProjects">
+          <div class="project-header">
+            <lucide-icon [name]="folderIcon"></lucide-icon>
+            <div class="project-progress">
+              <div class="progress-bar">
+                <div class="progress-fill" [style.width.%]="getProgress(project)"></div>
+              </div>
+              <span>{{ getProgress(project) }}%</span>
+            </div>
+          </div>
+          <h3>{{ project.project_name }}</h3>
+          <p>Model: {{ project.model_name }}</p>
+          <div class="project-footer">
+            <span class="date">Created on {{ formatDate(project.date_creation) }}</span>
+            <button class="view-btn">View project</button>
+          </div>
+        </div>
+        
+        <div class="project-card add-card" (click)="createNewProject()">
+          <div class="add-project">
+            <lucide-icon [name]="plusIcon" [size]="32"></lucide-icon>
+            <span>New project</span>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>

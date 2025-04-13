@@ -1,0 +1,154 @@
+<div class="container">
+  <div *ngIf="loading" class="loading-container">
+    <div class="spinner"></div>
+    <p>Loading project details...</p>
+  </div>
+
+  <div *ngIf="error" class="error-container">
+    <div class="error-message">
+      <p>{{ errorMessage }}</p>
+    </div>
+  </div>
+
+  <div *ngIf="!loading && !error && project" class="project-details">
+    <div class="header">
+      <h1>{{ project.project_name }}</h1>
+      <button class="download-btn" (click)="downloadScript()" data-download-btn>
+        <div class="icon-container">
+          <lucide-icon [name]="downloadIcon"></lucide-icon>
+        </div>
+        <span>Download Script</span>
+      </button>
+    </div>
+
+    <div class="card details-card">
+      <h2 class="card-title">Project Information</h2>
+      <div class="info-grid">
+        <div class="info-item">
+          <div class="info-label">
+            <div class="icon-container">
+              <lucide-icon [name]="codeIcon"></lucide-icon>
+            </div>
+            <span>Project Name</span>
+          </div>
+          <div class="info-value">{{ project.project_name }}</div>
+        </div>
+        <div class="info-item">
+          <div class="info-label">
+            <div class="icon-container">
+              <lucide-icon [name]="layersIcon"></lucide-icon>
+            </div>
+            <span>Model Name</span>
+          </div>
+          <div class="info-value">{{ project.model_name }}</div>
+        </div>
+        <div class="info-item">
+          <div class="info-label">
+            <div class="icon-container">
+              <lucide-icon [name]="databaseIcon"></lucide-icon>
+            </div>
+            <span>Project ID</span>
+          </div>
+          <div class="info-value">{{ project.id }}</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card script-card">
+      <h2 class="card-title">Angular Automation Script</h2>
+      
+      <div class="steps-container">
+        <h3>Script Usage Steps</h3>
+        <ol class="steps-list">
+          <li>
+            <div class="step-content">
+              <div class="step-icon">1</div>
+              <div class="step-text">Clone the Angular Init Automation repository</div>
+            </div>
+          </li>
+          <li>
+            <div class="step-content">
+              <div class="step-icon">2</div>
+              <div class="step-text">Navigate to the project directory</div>
+            </div>
+          </li>
+          <li>
+            <div class="step-content">
+              <div class="step-icon">3</div>
+              <div class="step-text">Open Docker Desktop before proceeding</div>
+            </div>
+          </li>
+          <li>
+            <div class="step-content">
+              <div class="step-icon">4</div>
+              <div class="step-text">
+                Make the script executable:
+                <div class="code-block">chmod +x angular-init-automation.sh</div>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="step-content">
+              <div class="step-icon">5</div>
+              <div class="step-text">
+                Run the script with arguments:
+                <div class="code-block">./angular-init-automation.sh</div>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="step-content">
+              <div class="step-icon">6</div>
+              <div class="step-text">Script will generate Angular components, services, and models</div>
+            </div>
+          </li>
+          <li>
+            <div class="step-content">
+              <div class="step-icon">7</div>
+              <div class="step-text">Docker Compose will start the application</div>
+            </div>
+          </li>
+        </ol>
+      </div>
+
+      <div class="example-container">
+        <h3>Example Usage</h3>
+        <div class="terminal">
+          <div class="icon-container">
+            <lucide-icon [name]="terminalIcon" class="terminal-icon"></lucide-icon>
+          </div>
+          <code>./angular-init-automation.sh</code>
+        </div>
+      </div>
+      
+      <div class="script-content-container">
+        <h3>Script Content</h3>
+        <div class="code-container">
+          <div class="code-header">
+            <div class="file-name">angular-init-automation.sh</div>
+            <div class="actions">
+              <button class="copy-btn" >
+                <div class="icon-container">
+                  <lucide-icon [name]="copyIcon"></lucide-icon>
+                </div>
+                <span>Copy</span>
+              </button>
+            </div>
+          </div>
+          <div class="code-content">
+            <pre><code>#!/bin/bash
+
+              APP_NAME=$1      # Used in API URL
+              MODEL_NAME=$2    # Model name
+              shift 2          # Remove first two arguments
+              FIELDS=$       # Remaining arguments as fields
+              
+              
+
+</code></pre>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
