@@ -1,4 +1,4 @@
-/* home.component.css */
+/* home.component.css - Updated with diverse but harmonious colors */
 body {
   margin: 0;
   padding: 0;
@@ -6,52 +6,53 @@ body {
 }
 
 .home-container {
-  background-color: #f0f2f5;
+  background-color: #f8f9fa;
   min-height: 100vh;
   color: #333333;
 }
 
 .header {
-  background-color: #716aef;
+  background-color: #ffffff;
   padding: 1.25rem 2rem;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
   display: flex;
   justify-content: space-between;
   align-items: center;
+  border-bottom: 1px solid #e9ecef;
 }
 
-.logo h1 {
-  color: #ffffff;
-  font-size: 1.7rem;
-  font-weight: 700;
+.logo  {
+  color: #15803d;
+  font-size: 1rem;
+  font-weight: 100;
   margin: 0;
 }
 
 .search-bar {
-  background-color: #9597f2;
+  background-color: #f0fdf4;
   border-radius: 8px;
   padding: 0.6rem 1rem;
   width: 280px;
   display: flex;
   align-items: center;
-  border: 1px solid #818cf8;
+  border: 1px solid #dcfce7;
 }
 
 .search-bar input {
   background-color: transparent;
   border: none;
-  color: #ffffff;
+  color: #495057;
   width: 100%;
   outline: none;
   font-size: 0.95rem;
 }
 
 .search-bar input::placeholder {
-  color: rgba(255, 255, 255, 0.8);
+  color: #adb5bd;
 }
 
 .search-bar lucide-icon {
-  color: #ffffff;
+  color: #16a34a;
   margin-right: 0.5rem;
 }
 
@@ -71,7 +72,7 @@ main {
 .projects-header h2 {
   font-size: 1.8rem;
   font-weight: 700;
-  color: #4338ca;
+  color: #166534;
   margin: 0;
   position: relative;
 }
@@ -83,12 +84,12 @@ main {
   left: 0;
   width: 50px;
   height: 4px;
-  background-color: #f59e0b;
+  background-color: #22c55e;
   border-radius: 2px;
 }
 
 .create-btn {
-  background-color:#10b981;
+  background-color: #16a34a;
   color: white;
   border: none;
   border-radius: 8px;
@@ -99,14 +100,14 @@ main {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  box-shadow: 0 2px 8px rgba(79, 70, 229, 0.3);
+  box-shadow: 0 2px 8px rgba(22, 163, 74, 0.3);
   transition: all 0.2s ease;
 }
 
 .create-btn:hover {
-  background-color: #4338ca;
+  background-color: #15803d;
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.4);
+  box-shadow: 0 4px 12px rgba(22, 163, 74, 0.4);
 }
 
 .projects-grid {
@@ -123,7 +124,7 @@ main {
   position: relative;
   display: flex;
   flex-direction: column;
-  border-top: 5px solid #4f46e5;
+  border-top: 5px solid #16a34a;
   transition: all 0.3s ease;
 }
 
@@ -140,7 +141,7 @@ main {
 }
 
 .project-header lucide-icon {
-  color: #4f46e5;
+  color: #16a34a;
   width: 24px;
   height: 24px;
 }
@@ -155,26 +156,26 @@ main {
 .progress-bar {
   width: 80px;
   height: 8px;
-  background-color: #e5e7eb;
+  background-color: #f0fdf4;
   border-radius: 4px;
   overflow: hidden;
 }
 
 .progress-fill {
   height: 100%;
-  background-color: #10b981;
+  background-color: #22c55e;
   border-radius: 4px;
 }
 
 .project-card h3 {
   font-size: 1.3rem;
   font-weight: 700;
-  color: #111827;
+  color: #212529;
   margin: 0.5rem 0;
 }
 
 .project-card p {
-  color: #6b7280;
+  color: #6c757d;
   font-size: 0.95rem;
   margin: 0;
   flex-grow: 1;
@@ -189,13 +190,35 @@ main {
 
 .date {
   font-size: 0.85rem;
-  color: #6b7280;
+  color: #6c757d;
+}
+.project-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.delete-btn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 12px;
+  background-color: #fff;
+  border: 1px solid #e53935;
+  border-radius: 4px;
+  color: #e53935;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.delete-btn:hover {
+  background-color: #ffebee;
 }
 
 .view-btn {
-  background-color: #f0f2ff;
-  color: #4f46e5;
-  border: 1px solid #4f46e5;
+  background-color: #f0fdf4;
+  color: #16a34a;
+  border: 1px solid #16a34a;
   border-radius: 6px;
   padding: 0.5rem 1rem;
   font-size: 0.9rem;
@@ -205,14 +228,14 @@ main {
 }
 
 .view-btn:hover {
-  background-color: #4f46e5;
+  background-color: #16a34a;
   color: #ffffff;
 }
 
 /* New project card - make it stand out */
 .add-card {
-  border: 2px dashed #a5b4fc;
-  background-color: #eef2ff;
+  border: 2px dashed #bbf7d0;
+  background-color: #f0fdf4;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -222,8 +245,8 @@ main {
 }
 
 .add-card:hover {
-  background-color: #e0e7ff;
-  border-color: #6366f1;
+  background-color: #dcfce7;
+  border-color: #22c55e;
 }
 
 .add-project {
@@ -235,11 +258,11 @@ main {
 }
 
 .add-project lucide-icon {
-  color: #4f46e5;
+  color: #16a34a;
 }
 
 .add-project span {
-  color: #4f46e5;
+  color: #16a34a;
   font-weight: 600;
 }
 
@@ -255,19 +278,19 @@ main {
 }
 
 .empty-state lucide-icon {
-  color: #a5b4fc;
+  color: #bbf7d0;
   margin-bottom: 1.5rem;
 }
 
 .empty-state h3 {
-  color: #111827;
+  color: #212529;
   font-size: 1.5rem;
   font-weight: 700;
   margin: 0 0 0.5rem;
 }
 
 .empty-state p {
-  color: #6b7280;
+  color: #6c757d;
   margin: 0 0 2rem;
   font-size: 1rem;
 }
@@ -281,38 +304,248 @@ main {
 }
 
 .no-results h3 {
-  color: #111827;
+  color: #212529;
   font-size: 1.3rem;
   font-weight: 700;
   margin: 0 0 0.5rem;
 }
 
 .no-results p {
-  color: #6b7280;
+  color: #6c757d;
   margin: 0;
   font-size: 1rem;
 }
 
-/* E-commerce specific colors */
+/* E-commerce project - amber/orange */
 .project-card:nth-of-type(1) {
-  border-top-color: #f97316;
+  border-top-color: #d97706;
 }
 .project-card:nth-of-type(1) .project-header lucide-icon {
-  color: #f97316;
+  color: #d97706;
+}
+.project-card:nth-of-type(1) .view-btn {
+  color: #d97706;
+  border-color: #d97706;
+  background-color: #fffbeb;
+}
+.project-card:nth-of-type(1) .view-btn:hover {
+  background-color: #d97706;
+  color: #ffffff;
+}
+.project-card:nth-of-type(1) .progress-fill {
+  background-color: #d97706;
 }
 
-/* Mobile app specific colors */
+/* Mobile app project - teal/blue */
 .project-card:nth-of-type(2) {
-  border-top-color: #06b6d4;
+  border-top-color: #0891b2;
 }
 .project-card:nth-of-type(2) .project-header lucide-icon {
-  color: #06b6d4;
+  color: #0891b2;
+}
+.project-card:nth-of-type(2) .view-btn {
+  color: #0891b2;
+  border-color: #0891b2;
+  background-color: #ecfeff;
+}
+.project-card:nth-of-type(2) .view-btn:hover {
+  background-color: #0891b2;
+  color: #ffffff;
+}
+.project-card:nth-of-type(2) .progress-fill {
+  background-color: #0891b2;
 }
 
-/* Educational platform specific colors */
+/* Educational platform project - purple */
 .project-card:nth-of-type(3) {
-  border-top-color: #8b5cf6;
+  border-top-color: #7c3aed;
 }
 .project-card:nth-of-type(3) .project-header lucide-icon {
-  color: #8b5cf6;
+  color: #7c3aed;
+}
+.project-card:nth-of-type(3) .view-btn {
+  color: #7c3aed;
+  border-color: #7c3aed;
+  background-color: #f5f3ff;
+}
+.project-card:nth-of-type(3) .view-btn:hover {
+  background-color: #7c3aed;
+  color: #ffffff;
+}
+.project-card:nth-of-type(3) .progress-fill {
+  background-color: #7c3aed;
+}
+.logo img {
+  height: 40px;
+}
+.dropdown {
+  position: relative;
+  margin-left: auto; /* This will push the dropdown to the right */
+  margin-right: 20px; /* Add some spacing from the search box */
+}
+
+.dropdown-toggle {
+  background: none;
+  border: none;
+  color: #16a34a;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  padding: 0.5rem;
+  font-size: 1rem;
+}
+
+.dropdown-toggle:hover {
+  color: #0f8a3c; /* Slightly darker green on hover */
+}
+
+.dropdown-menu {
+  position: absolute;
+  right: 0;
+  top: 100%;
+  background-color: white;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  border-radius: 8px;
+  min-width: 200px;
+  display: none;
+  z-index: 10;
+  border: 1px solid #e2e8f0;
+}
+
+.dropdown:hover .dropdown-menu {
+  display: block;
+}
+
+.dropdown-menu a, 
+.dropdown-menu button {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem; /* Increased horizontal padding */
+  color: #4a5568;
+  text-decoration: none;
+  text-align: left;
+  background: none;
+  border: none;
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+
+.dropdown-menu a:hover, 
+.dropdown-menu button:hover {
+  background-color: #f0fdf4; /* Light green background */
+  color: #16a34a; /* Keep text green on hover */
+}
+
+.logout-btn {
+  color: #e53e3e !important; /* Brighter red */
+  border-top: 1px solid #e2e8f0;
+  margin-top: 4px;
+  font-weight: 500;
+  width:100%;
+}
+
+.logout-btn:hover {
+  background-color: #fff5f5 !important; /* Light red background on hover */
+  color: #e53e3e !important;
+}
+/* Confirm dialog overlay */
+.confirm-dialog-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+/* Confirm dialog box */
+.confirm-dialog {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  padding: 24px;
+  max-width: 450px;
+  width: 100%;
+  margin: 0 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+/* Title of the dialog */
+.confirm-dialog h3 {
+  color: #333;
+  margin-top: 0;
+  margin-bottom: 16px;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+/* Message of the dialog */
+.confirm-dialog p {
+  color: #555;
+  margin-bottom: 24px;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+/* Actions container for buttons */
+.dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  width: 100%;
+}
+
+/* Cancel button styling */
+.cancel-btn {
+  padding: 10px 16px;
+  background-color: #f5f5f5;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  color: #333;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+/* Hover effect for cancel button */
+.cancel-btn:hover {
+  background-color: #ddd;
+  color: #333;
+}
+
+/* Confirm button styling */
+.confirm-btn {
+  padding: 10px 16px;
+  background-color: #28a745;
+  border: none;
+  border-radius: 4px;
+  color: white;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+/* Hover effect for confirm button */
+.confirm-btn:hover {
+  background-color: #218838;
+}
+
+/* Focus states */
+.cancel-btn:focus, .confirm-btn:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(38, 139, 255, 0.4);
+}
+.project-footer {
+  display: flex;
+  gap: 8px;
 }

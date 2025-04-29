@@ -2,7 +2,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { LucideAngularModule, Folder, FolderPlus, Plus, Search } from 'lucide-angular';
+import { LucideAngularModule, Folder, FolderPlus, Plus, Search, User, Settings, LogOut, Trash2 } from 'lucide-angular';
 import { Project } from '../../../../core/models/project';
 import { ProjectService } from '../../../project/services/project.service';
 
@@ -17,105 +17,48 @@ export class HomeComponent implements OnInit {
   projects: Project[] = [];
   filteredProjects: Project[] = [];
   searchQuery: string = '';
+  showConfirmDialog: boolean = false;
+  projectIdToDelete: number | null = null;
+  
+  // Add user property
+  user = {
+    username: 'Default User' // Add a default value
+  };
   
   // Lucide icons
   folderIcon = Folder;
   folderPlusIcon = FolderPlus;
   plusIcon = Plus;
   searchIcon = Search;
-
+  userIcon = User;
+  settingsIcon = Settings;
+  logoutIcon = LogOut;
+  trashIcon = Trash2;
+  
   constructor(
     private router: Router,
     private projectService: ProjectService
   ) {}
 
   ngOnInit(): void {
-    // Charger les projets
+    // Load projects
     this.loadProjects();
   }
 
   loadProjects(): void {
-    // Dans un cas réel, vous utiliseriez votre service
-    // this.projectService.getProjects().subscribe(projects => {
-    //   this.projects = projects;
-    //   this.filteredProjects = [...projects];
-    // });
-
-    // Données de test
-    this.projects = [
-      {
-        id: 1,
-        project_name: 'Site E-commerce',
-        model_name: 'Product',
-        framework: {
-          id: 1, name: 'Django',
-          project_type: '',
-          type: 'frontend'
-        },
-        user: 1,
-        date_creation: '2025-03-15',
-        date_modification: '2025-04-01',
-        fields: [
-          {
-            name: 'name',
-            field_type: ''
-          },
-          {
-            name: 'price',
-            field_type: ''
-          }
-        ]
+    this.projectService.getProjects().subscribe({
+      next: (projects) => {
+        this.projects = projects;
+        this.filteredProjects = [...projects];
+        console.log('Projects loaded:', this.projects);
       },
-      {
-        id: 2,
-        project_name: 'Application mobile',
-        model_name: 'Order',
-        framework: {
-          id: 1, name: 'Django',
-          project_type: '',
-          type: 'frontend'
-        },
-        user: 1,
-        date_creation: '2025-03-28',
-        date_modification: '2025-03-30',
-        fields: [
-          {
-            name: 'customer',
-            field_type: ''
-          },
-          {
-            name: 'total',
-            field_type: ''
-          }
-        ]
-      },
-      {
-        id: 3,
-        project_name: 'Plateforme éducative',
-        model_name: 'Course',
-        framework: {
-          id: 2, name: 'FastAPI',
-          project_type: '',
-          type: 'frontend'
-        },
-        user: 1,
-        date_creation: '2025-04-05',
-        date_modification: '2025-04-08',
-        fields: [
-          {
-            name: 'title',
-            field_type: ''
-          },
-          {
-            name: 'description',
-            field_type: ''
-          }
-        ]
+      error: (error) => {
+        console.error('Error loading projects:', error);
+        // You can add error handling here, such as displaying a notification
       }
-    ];
-    this.filteredProjects = [...this.projects];
+    });
   }
-
+  
   createNewProject(): void {
     this.router.navigate(['/create-project']);
   }
@@ -125,7 +68,9 @@ export class HomeComponent implements OnInit {
     this.searchQuery = query;
     this.filteredProjects = this.projects.filter(project => 
       project.project_name.toLowerCase().includes(query) || 
-      project.model_name.toLowerCase().includes(query)
+      project.framework_name?.toLowerCase().includes(query) ||
+      // Search in table names if needed
+      project.tables.some(table => table.table_name.toLowerCase().includes(query))
     );
   }
 
@@ -138,12 +83,90 @@ export class HomeComponent implements OnInit {
     });
   }
   
-  // Calculer le pourcentage de progression
+  // Calculate progress percentage based on the new Project model
   getProgress(project: Project): number {
-    // Exemple simple: si le projet a des champs définis, on considère qu'il a progressé
-    if (project.fields && project.fields.length > 0) {
-      return Math.min(Math.floor((project.fields.length / 5) * 100), 100);
+    // Using tables and fields from the new Project model
+    if (project.tables && project.tables.length > 0) {
+      // Count total fields across all tables
+      const totalFields = project.tables.reduce((sum, table) => sum + (table.fields?.length || 0), 0);
+      
+      // Base progress on number of tables and fields
+      if (totalFields > 0) {
+        // Calculate progress based on tables and fields
+        return Math.min(Math.floor((totalFields / 10) * 100), 100);
+      } else {
+        // Has tables but no fields
+        return 40;
+      }
     }
-    return 20; // Par défaut, 20% si le projet existe mais n'a pas de champs
+    return 20; // Default 20% if the project exists but has no tables
+  }
+  
+  viewProject(projectId: number | undefined): void {
+    if (projectId) {
+      this.router.navigate(['/project-details', projectId]);
+    } else {
+      console.error('Cannot navigate to project detail: Project ID is undefined');
+      // Optionally show a user notification
+    }
+  }
+  
+  logout(): void {
+    // Clear tokens
+    localStorage.removeItem('token');
+    sessionStorage.removeItem('token');
+    
+    // Redirect to login page
+    this.router.navigate(['/login']);
+  }
+  
+  // Show the confirm dialog with the project ID to delete
+  openConfirmDialog(id: number | undefined, event: Event): void {
+    event.stopPropagation(); // Prevent the card click event from triggering
+    
+    if (!id) {
+      console.error('Cannot delete project: Project ID is undefined');
+      return;
+    }
+    
+    this.projectIdToDelete = id;
+    this.showConfirmDialog = true;
+  }
+
+  // Close the dialog without deleting
+  cancelDelete(): void {
+    this.showConfirmDialog = false;
+    this.projectIdToDelete = null;
+  }
+
+  // Confirm and execute the delete
+  confirmDelete(): void {
+    if (this.projectIdToDelete !== null) {
+      this.projectService.deleteProject(this.projectIdToDelete)
+        .subscribe({
+          next: () => {
+            // Remove project from local arrays
+            this.projects = this.projects.filter(p => p.id !== this.projectIdToDelete);
+            this.filteredProjects = this.filteredProjects.filter(p => p.id !== this.projectIdToDelete);
+            console.log('Project deleted successfully');
+            
+            // Reset dialog state
+            this.showConfirmDialog = false;
+            this.projectIdToDelete = null;
+            
+            // You could add a toast notification here if you have a toast service
+            // this.toastService.showSuccess('Project deleted successfully');
+          },
+          error: (error) => {
+            console.error('Error deleting project:', error);
+            // Handle error, show notification to user
+            // this.toastService.showError('Failed to delete project. Please try again.');
+            
+            // Reset dialog state
+            this.showConfirmDialog = false;
+            this.projectIdToDelete = null;
+          }
+        });
+    }
   }
 }

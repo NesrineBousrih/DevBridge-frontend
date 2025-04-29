@@ -1,110 +1,115 @@
 <!-- project-detail.component.html -->
 <div class="container">
-    <div class="card">
-      <div class="card-header d-flex justify-content-between align-items-center">
-        <h2>Project Details</h2>
-        <button class="btn btn-secondary" (click)="goBack()">Back to Projects</button>
-      </div>
-      
-      <div class="card-body">
-        <div *ngIf="loading" class="text-center">
-          <div class="spinner-border text-primary" role="status">
-            <span class="sr-only">Loading...</span>
-          </div>
-        </div>
-        
-        <div *ngIf="error" class="alert alert-danger">
-          {{ error }}
-        </div>
-        
-        <div *ngIf="!loading && !error && project">
-          <div class="row mb-4">
-            <div class="col-md-6">
-              <h3>Basic Information</h3>
-              <table class="table">
-                <tbody>
-                  <tr>
-                    <th>Project Name</th>
-                    <td>{{ project.project_name }}</td>
-                  </tr>
-                  <tr>
-                    <th>Model Name</th>
-                    <td>{{ project.model_name }}</td>
-                  </tr>
-                  <tr>
-                    <th>Framework</th>
-                    <td>{{ project.framework?.name || 'N/A' }}</td>
-                  </tr>
-                  <tr>
-                    <th>Created</th>
-                    <td>{{ project.date_creation | date:'medium' }}</td>
-                  </tr>
-                  <tr>
-                    <th>Last Modified</th>
-                    <td>{{ project.date_modification | date:'medium' }}</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-          
-          <div class="row mb-4">
-            <div class="col-12">
-              <h3>Fields</h3>
-              <div *ngIf="project.fields && project.fields.length > 0; else noFields">
-                <table class="table">
-                  <thead>
-                    <tr>
-                      <th>Field Name</th>
-                      <th>Field Type</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr *ngFor="let field of project.fields">
-                      <td>{{ field.name }}</td>
-                      <td>{{ field.field_type }}</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-              <ng-template #noFields>
-                <p>No fields defined for this project.</p>
-              </ng-template>
-            </div>
-          </div>
-          
-          <div class="row mb-4">
-            <div class="col-12">
-              <h3>Actions</h3>
-              <div class="btn-group">
-                <button class="btn btn-primary" (click)="onEdit()">Edit Project</button>
-                <button class="btn btn-danger" (click)="openConfirmDialog()">Delete Project</button>
-                <button *ngIf="project.script_file" class="btn btn-secondary" (click)="downloadScript()">
-                  Download Script
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+  <div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center">
+      <h2>Project Details</h2>
+      <button class="btn btn-secondary" (click)="goBack()">Back to Projects</button>
     </div>
     
-    <!-- Confirmation Dialog -->
-    <div class="modal" [class.show]="showConfirmDialog" *ngIf="showConfirmDialog">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">Confirm Delete</h5>
-            <button type="button" class="close" (click)="cancelDelete()">&times;</button>
+    <div class="card-body">
+      <div *ngIf="loading" class="text-center">
+        <div class="spinner-border text-primary" role="status">
+          <span class="sr-only">Loading...</span>
+        </div>
+      </div>
+      
+      <div *ngIf="error" class="alert alert-danger">
+        {{ error }}
+      </div>
+      
+      <div *ngIf="!loading && !error && project">
+        <div class="row mb-4">
+          <div class="col-md-6">
+            <h3>Basic Information</h3>
+            <table class="table">
+              <tbody>
+                <tr>
+                  <th>Project Name</th>
+                  <td>{{ project.project_name }}</td>
+                </tr>
+                <tr>
+                  <th>Framework</th>
+                  <td>{{ project.framework_name }}</td>
+                </tr>
+                <tr>
+                  <th>Created</th>
+                  <td>{{ project.date_creation }}</td>
+                </tr>
+                <tr>
+                  <th>Last Modified</th>
+                  <td>{{ project.date_modification }}</td>
+                </tr>
+              </tbody>
+            </table>
           </div>
-          <div class="modal-body">
-            <p>Are you sure you want to delete this project? This action cannot be undone.</p>
+        </div>
+
+        <!-- Display tables section -->
+        <div class="row mb-4">
+          <div class="col-12">
+            <h3>Tables</h3>
+            <div *ngIf="project.tables && project.tables.length > 0">
+              <div *ngFor="let table of project.tables; let i = index" class="card mb-3">
+                <div class="card-header d-flex justify-content-between align-items-center" (click)="toggleTable(i)" style="cursor: pointer;">
+                  <h5>{{ table.table_name }}</h5>
+                  <span>
+                    <i [class]="expandedTables[i] ? 'bi bi-chevron-up' : 'bi bi-chevron-down'"></i>
+                  </span>
+                </div>
+            
+                <div class="card-body" *ngIf="expandedTables[i]">
+                  <table class="table table-striped">
+                    <thead>
+                      <tr>
+                        <th>Field Name</th>
+                        <th>Field Type</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let field of table.fields">
+                        <td>{{ field.name }}</td>
+                        <td>{{ field.type }}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+            
+            <div *ngIf="!project.tables || project.tables.length === 0" class="alert alert-info">
+              No tables defined for this project.
+            </div>
           </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" (click)="cancelDelete()">Cancel</button>
-            <button type="button" class="btn btn-danger" (click)="confirmDelete()">Delete</button>
+        </div>
+       
+        <div class="row mb-4">
+          <div class="col-12">
+            <h3>Actions</h3>
+            <div class="btn-group">
+              <button class="btn btn-danger" (click)="openConfirmDialog()">Delete Project</button>
+            </div>
           </div>
         </div>
       </div>
     </div>
   </div>
+  
+  <!-- Confirmation Dialog -->
+  <div class="modal" [class.show]="showConfirmDialog" *ngIf="showConfirmDialog">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Confirm Delete</h5>
+          <button type="button" class="close" (click)="cancelDelete()">&times;</button>
+        </div>
+        <div class="modal-body">
+          <p>Are you sure you want to delete this project? This action cannot be undone.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="cancelDelete()">Cancel</button>
+          <button type="button" class="btn btn-danger" (click)="confirmDelete()">Delete</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

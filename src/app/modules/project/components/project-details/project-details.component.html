@@ -13,12 +13,20 @@
   <div *ngIf="!loading && !error && project" class="project-details">
     <div class="header">
       <h1>{{ project.project_name }}</h1>
-      <button class="download-btn" (click)="downloadScript()" data-download-btn>
-        <div class="icon-container">
-          <lucide-icon [name]="downloadIcon"></lucide-icon>
-        </div>
-        <span>Download Script</span>
-      </button>
+      <div class="button-group">
+        <button class="download-btn" (click)="downloadScript()" data-download-btn>
+          <div class="icon-container">
+            <lucide-icon [name]="downloadIcon"></lucide-icon>
+          </div>
+          <span>Download Script</span>
+        </button>
+        <button class="download-btn" (click)="downloadZip()" data-download-zip-btn>
+          <div class="icon-container">
+            <lucide-icon [name]="downloadIcon"></lucide-icon>
+          </div>
+          <span>Download ZIP</span>
+        </button>
+      </div>
     </div>
 
     <div class="card details-card">
@@ -40,7 +48,7 @@
             </div>
             <span>Model Name</span>
           </div>
-          <div class="info-value">{{ project.model_name }}</div>
+          <div class="info-value">{{ project.framework_name }}</div>
         </div>
         <div class="info-item">
           <div class="info-label">
@@ -121,34 +129,6 @@
         </div>
       </div>
       
-      <div class="script-content-container">
-        <h3>Script Content</h3>
-        <div class="code-container">
-          <div class="code-header">
-            <div class="file-name">angular-init-automation.sh</div>
-            <div class="actions">
-              <button class="copy-btn" >
-                <div class="icon-container">
-                  <lucide-icon [name]="copyIcon"></lucide-icon>
-                </div>
-                <span>Copy</span>
-              </button>
-            </div>
-          </div>
-          <div class="code-content">
-            <pre><code>#!/bin/bash
-
-              APP_NAME=$1      # Used in API URL
-              MODEL_NAME=$2    # Model name
-              shift 2          # Remove first two arguments
-              FIELDS=$       # Remaining arguments as fields
-              
-              
-
-</code></pre>
-          </div>
-        </div>
-      </div>
-    </div>
+     
   </div>
 </div>

@@ -14,58 +14,58 @@ import { FrameworkFormComponent } from './modules/dashboard/components/framework
 import { CreateProjectComponent } from './modules/project/components/create-project/create-project.component';
 import { ProjectDetailsComponent } from './modules/project/components/project-details/project-details.component';
 import { ProjectListComponent } from './modules/dashboard/components/project-list/project-list.component';
-import { ProjectFormComponent } from './modules/dashboard/components/project-form/project-form.component';
 import { ProjectDetailComponent } from './modules/dashboard/components/project-detail/project-detail.component';
+import { GetStartedComponent } from './modules/getstarted/components/get-started/get-started.component';
 export const routes: Routes = [
-    { path: '', redirectTo: 'login', pathMatch: 'full' },
-    {
-      path: 'login',
-      component: LoginComponent,
-      canActivate: [isNotLoggedInGuard],
-    },
-    {
-      path: 'register',
-      component: RegisterComponent,
-      canActivate: [isNotLoggedInGuard],
-    },
-    { path: 'home', component: HomeComponent, canActivate: [isLoggedInGuard] },
-    { path: 'create-project', component: CreateProjectComponent, canActivate: [isLoggedInGuard] },
-    { path: 'project-details', component:ProjectDetailsComponent, canActivate: [isLoggedInGuard] },
-    { path: 'project-details/:id', component: ProjectDetailsComponent },
-    {
-      path: 'dashboard',
-      component: DashboardComponent,
-      canActivate: [isLoggedInGuard],
-      children: [
-        { path: 'users', component: UserListComponent },
-        { path: 'users/add', component: UserFormComponent },
-        { path: 'users/edit/:id', component: UserFormComponent },
-        { path: 'users/:id', component: UserDetailComponent },
-        // Framework routes
-        { path: 'frameworks', component: FrameworkListComponent },
-        { path: 'frameworks/add', component: FrameworkFormComponent }, // Added missing "add" route
-        { path: 'frameworks/edit/:id', component: FrameworkFormComponent },
-        { path: 'frameworks/:id', component: FrameworkDetailsComponent },
-        {
-          path: 'projects',
-          component: ProjectListComponent
-        },
-        {
-          path: 'projects/new',
-          component: ProjectFormComponent
-        },
-        {
-          path: 'projects/:id',
-          component: ProjectDetailComponent
-        },
-        {
-          path: 'projects/edit/:id',
-          component: ProjectFormComponent
-        }
-        { path: '', redirectTo: '', pathMatch: 'full' },
-        
-      ],
-    },
-  
-    { path: '**', redirectTo: 'login' },
-  ];
+ 
+  { path: '', redirectTo: 'login', pathMatch: 'full' },
+  { path: 'get-started',component: GetStartedComponent,},
+  {
+    path: 'login',
+    component: LoginComponent,
+    canActivate: [isNotLoggedInGuard],
+  },
+  {
+    path: 'register',
+    component: RegisterComponent,
+    canActivate: [isNotLoggedInGuard],
+  },
+  { path: 'home', component: HomeComponent, canActivate: [isLoggedInGuard] },
+  {
+    path: 'create-project',
+    component: CreateProjectComponent,
+    canActivate: [isLoggedInGuard],
+  },
+  {
+    path: 'project-details',
+    component: ProjectDetailsComponent,
+    canActivate: [isLoggedInGuard],
+  },
+  { path: 'project-details/:id', component: ProjectDetailsComponent },
+  {
+    path: 'dashboard',
+    component: DashboardComponent,
+    canActivate: [isLoggedInGuard],
+    children: [
+      { path: 'users', component: UserListComponent },
+      { path: 'users/add', component: UserFormComponent },
+      { path: 'users/edit/:id', component: UserFormComponent },
+      { path: 'users/:id', component: UserDetailComponent },
+      // Framework routes
+      { path: 'frameworks', component: FrameworkListComponent },
+      { path: 'frameworks/add', component: FrameworkFormComponent }, // Added missing "add" route
+      { path: 'frameworks/edit/:id', component: FrameworkFormComponent },
+      { path: 'frameworks/:id', component: FrameworkDetailsComponent },
+      {
+        path: 'projects',
+        component: ProjectListComponent,
+      },
+      {
+        path: 'projects/:id',
+        component: ProjectDetailComponent,
+      },
+    ],
+  },
+
+  { path: '**', redirectTo: 'login' },
+];

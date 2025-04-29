@@ -38,25 +38,8 @@ export class NavbarComponent implements OnInit {
   ) {}
   
   ngOnInit(): void {
-    // Load user info
-    this.navbarService.getUserInfo().subscribe({
-      next: (data) => { 
-        this.user = data; 
-      },
-      error: (err) => { 
-        console.error('User info error:', err); 
-      }
-    });
     
-    // Load notifications
-    this.navbarService.getNotifications().subscribe({
-      next: (data) => { 
-        this.notifications = data; 
-      },
-      error: (err) => { 
-        console.error('Notifications error:', err); 
-      }
-    });
+  
   }
   
   logout(): void {

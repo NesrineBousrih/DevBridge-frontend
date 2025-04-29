@@ -105,108 +105,383 @@
       </div>
     </div>
 
-    <!-- Step 3: Model Definition -->
-    <div *ngIf="currentStep === 3" class="step-panel">
-      <h2>Define Your Model</h2>
-      <p class="step-description">
-        Add fields to your data model for {{ selectedFramework?.name }}
-      </p>
+   <!-- Step 3: Model Definition -->
+<div *ngIf="currentStep === 3" class="step-panel">
+  <h2>Define Your Model</h2>
+  <p class="step-description">
+    Add fields to your data model for {{ selectedFramework?.name }}
+  </p>
 
-      <form [formGroup]="modelForm">
-        <div class="form-group">
-          <label for="projectName">Project Name</label>
-          <input
-            type="text"
-            id="projectName"
-            formControlName="projectName"
-            placeholder="Enter project name"
-          />
-          <div
-            *ngIf="
-              modelForm.get('projectName')?.invalid &&
-              modelForm.get('projectName')?.touched
-            "
-            class="validation-error"
-          >
-            Project name is required
-          </div>
+  <!-- Model creation options -->
+  <div class="model-creation-options">
+    <div class="option-tabs">
+      <button 
+        [ngClass]="{ 'active': modelCreationOption === 'manual' }"
+        (click)="setModelCreationOption('manual')"
+      >
+        Manual Definition
+      </button>
+      <button 
+        [ngClass]="{ 'active': modelCreationOption === 'database' }"
+        (click)="setModelCreationOption('database')"
+      >
+        From Database
+      </button>
+    </div>
+  </div>
+
+<!-- Option 1: Manual Model Definition -->
+<div *ngIf="modelCreationOption === 'manual'">
+  <form [formGroup]="projectForm">
+    <div class="form-group">
+      <label for="projectName">Project Name</label>
+      <input
+        type="text"
+        id="projectName"
+        formControlName="projectName"
+        placeholder="Enter project name"
+      />
+      <div
+        *ngIf="
+          projectForm.get('projectName')?.invalid &&
+          projectForm.get('projectName')?.touched
+        "
+        class="validation-error"
+      >
+        Project name is required
+      </div>
+    </div>
+  </form>
+
+  <!-- Models Management Section -->
+  <div class="models-container">
+    <div class="models-header">
+      <h3>Models</h3>
+      <button type="button" class="add-model-btn" (click)="addNewModel()">
+        <lucide-icon [name]="plusIcon"></lucide-icon>
+        Add Model
+      </button>
+    </div>
+
+    <!-- Model Search and Filter (shown when there are multiple models) -->
+    <div *ngIf="models.length > 1" class="models-search-filter">
+      <div class="search-filter">
+        <input 
+          type="text" 
+          placeholder="Search models..." 
+          [(ngModel)]="modelSearchQuery" 
+          [ngModelOptions]="{standalone: true}"
+          (input)="filterModels()"
+        />
+      </div>
+    </div>
+
+    <!-- List of Models -->
+    <div *ngIf="models.length > 0" class="models-list">
+      <div *ngFor="let model of filteredModels" class="model-item">
+        <div 
+          class="model-header" 
+          (click)="toggleModelDetails(model.id)"
+        >
+          <span class="model-name">{{ model.name || 'Unnamed Model' }}</span>
+          <span class="model-fields-count">{{ getModelFieldsCount(model.id) }} fields</span>
+          <span class="model-toggle">{{ isModelExpanded(model.id) ? '▼' : '►' }}</span>
         </div>
+        
+        <!-- Model Details when Expanded -->
+        <div *ngIf="isModelExpanded(model.id)" class="model-details">
+          <form [formGroup]="modelForms[model.id]">
+            <div class="form-group">
+              <label [for]="'modelName_' + model.id">Model Name</label>
+              <input
+                [id]="'modelName_' + model.id"
+                type="text"
+                formControlName="modelName"
+                placeholder="Enter model name"
+                (input)="updateModelName(model.id)"
+              />
+              <div
+                *ngIf="
+                  modelForms[model.id].get('modelName')?.invalid &&
+                  modelForms[model.id].get('modelName')?.touched
+                "
+                class="validation-error"
+              >
+                Model name is required
+              </div>
+            </div>
 
-        <div class="form-group">
-          <label for="modelName">Model Name</label>
-          <input
-            type="text"
-            id="modelName"
-            formControlName="modelName"
-            placeholder="Enter model name"
-          />
-          <div
-            *ngIf="
-              modelForm.get('modelName')?.invalid &&
-              modelForm.get('modelName')?.touched
-            "
-            class="validation-error"
-          >
-            Model name is required
-          </div>
-        </div>
+            <div class="model-fields-container">
+              <div class="model-fields-header">
+                <h4>Fields</h4>
+                <button 
+                  type="button" 
+                  class="add-field-btn" 
+                  (click)="addField(model.id)"
+                >
+                  <lucide-icon [name]="plusIcon" [size]="18"></lucide-icon>
+                  Add Field
+                </button>
+              </div>
 
-        <div class="model-fields-container">
-          <div class="model-fields-header">
-            <h3>Model Fields</h3>
-            <button type="button" class="add-field-btn" (click)="addField()">
-              Add Field
+              <div formArrayName="fields">
+                <div
+                  *ngFor="let field of getModelFields(model.id).controls; let i = index"
+                  [formGroupName]="i"
+                  class="field-row"
+                >
+                  <input
+                    type="text"
+                    formControlName="name"
+                    placeholder="Field name"
+                  />
+                  <select formControlName="field_type">
+                    <option *ngFor="let type of fieldTypes" [value]="type">
+                      {{ type }}
+                    </option>
+                  </select>
+                  <button
+                    type="button"
+                    class="remove-field-btn"
+                    (click)="removeField(model.id, i)"
+                  >
+                    <lucide-icon [name]="trashIcon" [size]="18"></lucide-icon>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </form>
+          
+          <div class="model-actions">
+            <button 
+              type="button" 
+              class="delete-model-btn" 
+              (click)="deleteModel(model.id)"
+              [disabled]="models.length === 1"
+            >
+              <lucide-icon [name]="trashIcon"></lucide-icon>
+              Delete Model
             </button>
           </div>
-
-          <div formArrayName="fields">
-            <div
-              *ngFor="let field of fields.controls; let i = index"
-              [formGroupName]="i"
-              class="field-row"
-            >
-              <input
-                type="text"
-                formControlName="name"
-                placeholder="Field name"
-              />
-              <select formControlName="type">
-                <option *ngFor="let type of fieldTypes" [value]="type">
-                  {{ type }}
-                </option>
-              </select>
-              <button
-                type="button"
-                class="remove-field-btn"
-                (click)="removeField(i)"
-              >
-                Remove
-              </button>
-            </div>
-          </div>
         </div>
-
-        <div class="project-summary">
-          <h3>Project Summary</h3>
-          <div class="summary-content">
-            <p><strong>Project Type:</strong> {{ projectType }}</p>
-            <p><strong>Framework:</strong> {{ selectedFramework?.name }}</p>
-            <p><strong>Number of Fields:</strong> {{ fields.length }}</p>
-          </div>
-        </div>
-
-        <div class="create-project-btn-container">
-          <button
-            type="button"
-            class="create-project-btn"
-            (click)="createProject()"
-          >
-            <lucide-icon [name]="checkCircleIcon"></lucide-icon>
-            Create Project
-          </button>
-        </div>
-      </form>
+      </div>
     </div>
+    
+    <!-- No Models Message (shouldn't appear normally) -->
+    <div *ngIf="models.length === 0" class="no-models-message">
+      No models defined yet. Click "Add Model" to get started.
+    </div>
+  </div>
+
+ 
+</div>
+  <!-- Option 2: Database Connection -->
+<div *ngIf="modelCreationOption === 'database'">
+  <form [formGroup]="dbConnectionForm" class="db-connection-form">
+    <h3>Database Connection</h3>
+    
+    <div class="form-row">
+      <div class="form-group">
+        <label for="host">Host</label>
+        <input
+          type="text"
+          id="host"
+          formControlName="host"
+          placeholder="localhost"
+        />
+        <div
+          *ngIf="
+            dbConnectionForm.get('host')?.invalid &&
+            dbConnectionForm.get('host')?.touched
+          "
+          class="validation-error"
+        >
+          Host is required
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="port">Port</label>
+        <input
+          type="text"
+          id="port"
+          formControlName="port"
+          placeholder="5432"
+        />
+        <div
+          *ngIf="
+            dbConnectionForm.get('port')?.invalid &&
+            dbConnectionForm.get('port')?.touched
+          "
+          class="validation-error"
+        >
+          Valid port is required
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="databaseName">Database Name</label>
+      <input
+        type="text"
+        id="databaseName"
+        formControlName="databaseName"
+        placeholder="database_name"
+      />
+      <div
+        *ngIf="
+          dbConnectionForm.get('databaseName')?.invalid &&
+          dbConnectionForm.get('databaseName')?.touched
+        "
+        class="validation-error"
+      >
+        Database name is required
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label for="username">Username</label>
+        <input
+          type="text"
+          id="username"
+          formControlName="username"
+          placeholder="postgres"
+        />
+        <div
+          *ngIf="
+            dbConnectionForm.get('username')?.invalid &&
+            dbConnectionForm.get('username')?.touched
+          "
+          class="validation-error"
+        >
+          Username is required
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input
+          type="password"
+          id="password"
+          formControlName="password"
+          placeholder="Password"
+        />
+      </div>
+    </div>
+
+    <button 
+      type="button" 
+      class="connect-db-btn"
+      [disabled]="dbConnectionForm.invalid || isLoading"
+      (click)="connectToDatabase()"
+    >
+      <span *ngIf="!isLoading">Connect to Database</span>
+      <div *ngIf="isLoading" class="spinner-small"></div>
+    </button>
+  </form>
+
+  <!-- Table Selection (appears after successful connection) -->
+  <div *ngIf="availableTables.length > 0" class="table-selection">
+    <h3>Select Tables</h3>
+    <div class="table-selection-header">
+      <div class="search-filter">
+        <input 
+          type="text" 
+          placeholder="Search tables..." 
+          [(ngModel)]="tableSearchQuery" 
+          [ngModelOptions]="{standalone: true}"
+          (input)="filterTables()"
+        />
+      </div>
+      <div class="selection-actions">
+        <button type="button" class="select-btn" (click)="selectAllTables()">Select All</button>
+        <button type="button" class="clear-btn" (click)="clearTableSelection()">Clear</button>
+      </div>
+    </div>
+    <div class="tables-list">
+      <div 
+        *ngFor="let table of filteredTables" 
+        class="table-item"
+        [ngClass]="{'selected': selectedTables.includes(table)}"
+        (click)="toggleTableSelection(table)"
+      >
+        <div class="table-checkbox">
+          <input 
+            type="checkbox" 
+            [checked]="selectedTables.includes(table)" 
+            (click)="$event.stopPropagation()"
+            (change)="toggleTableSelection(table)"
+          />
+        </div>
+        <div class="table-name">{{ table }}</div>
+      </div>
+    </div>
+    <div *ngIf="selectedTables.length > 0" class="selected-count">
+      {{ selectedTables.length }} table(s) selected
+    </div>
+    <button 
+      *ngIf="selectedTables.length > 0" 
+      type="button" 
+      class="load-tables-btn"
+      (click)="loadTableStructures()"
+    >
+      Load Table Structures
+    </button>
+  </div>
+
+  <!-- Project Name Input (appears after table selection) -->
+  <div *ngIf="selectedTables.length > 0 && allTablesLoaded" class="form-group project-name-input">
+    <form [formGroup]="projectForm">
+      <label for="projectName">Project Name</label>
+      <input
+        type="text"
+        id="projectName"
+        formControlName="projectName"
+        placeholder="Enter project name"
+      />
+      <div
+  *ngIf="
+    projectForm.get('projectName')?.invalid &&
+    projectForm.get('projectName')?.touched
+  "
+  class="validation-error"
+>
+  Project name is required
+</div>
+    </form>
+  </div>
+
+  <!-- Tables Summary (after structure loaded) -->
+  <div *ngIf="selectedTables.length > 0 && allTablesLoaded" class="tables-summary">
+    <h3>Selected Tables</h3>
+    <div *ngFor="let table of selectedTables" class="table-summary-item">
+      <div class="table-summary-header" (click)="toggleTableDetails(table)">
+        <span class="table-summary-name">{{ table }}</span>
+        <span class="table-summary-fields">{{ getTableFieldsCount(table) }} fields</span>
+        <span class="table-summary-toggle">{{ isTableExpanded(table) ? '▼' : '►' }}</span>
+      </div>
+      <div *ngIf="isTableExpanded(table)" class="table-details">
+        <div *ngFor="let field of getTableFields(table)" class="table-field-item">
+          <span class="field-name">{{ field.name }}</span>
+          <span class="field-type">{{ field.type }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+  <div class="create-project-btn-container">
+    <button
+      type="button"
+      class="create-project-btn"
+      [disabled]="!isFormValid()"
+      (click)="createProject()"
+    >
+      <lucide-icon [name]="checkCircleIcon"></lucide-icon>
+      Create Project
+    </button>
+  </div>
+</div>
   </div>
 
   <!-- Navigation Buttons -->

@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { Observable, throwError } from 'rxjs';
+import { Observable, of, throwError } from 'rxjs';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { catchError, map, tap } from 'rxjs/operators';
-import { Project } from './project.service';
+import { Project } from '../../../core/models/project';
 
 @Injectable({
   providedIn: 'root'
@@ -79,6 +79,26 @@ export class ProjectDetailsService {
       catchError(error => {
         console.error('Error in download process:', error);
         return throwError(() => error);
+      })
+    );
+  }
+ 
+  downloadZip(projectId: number): Observable<Blob> {
+    const url = `${this.apiUrl}/projects/${projectId}/download_zip/`;
+    
+    return this.http.get(url, {
+      headers: new HttpHeaders({
+        Authorization: `Token ${localStorage.getItem('token')}`
+      }),
+      responseType: 'blob'
+    }).pipe(
+      tap(response => console.log('ZIP response received', response)),
+      catchError((error: HttpErrorResponse) => {
+        console.error('Error fetching ZIP:', error);
+        if (error.status === 404) {
+          console.error('ZIP URL not found');
+        }
+        return throwError(() => new Error('Failed to download ZIP: ' + (error.message || 'Unknown error')));
       })
     );
   }

@@ -1,0 +1,113 @@
+<!-- get-started.component.html -->
+<div class="get-started-container">
+  <header class="header">
+    <div class="logo">
+      <img src="assets/devbridge-logo.png" alt="DevBridge Logo" />
+    </div>
+    <div class="auth-buttons">
+        <button class="btn-login" (click)="navigateToLogin()">Login</button>
+        <button class="btn-signup" (click)="navigateToSignUp()">Sign Up</button>
+    </div>
+  </header>
+
+  <main class="main-content">
+    <div class="hero-section">
+      <div class="hero-text">
+        <h1>Connect. Create. Download.</h1>
+        <h2>The bridge between developers and success</h2>
+        <p>DevBridge makes modern web app development faster and easier.</p>
+        <div class="cta-buttons">
+            <button class="btn-primary" (click)="navigateToSignUp()">Get Started</button>
+            <button class="btn-secondary" (click)="learnMore()">Learn More</button>
+        </div>
+      </div>
+      <div class="hero-image">
+        <img src="assets/collaboration.png" alt="Development Collaboration" />
+      </div>
+    </div>
+
+    <div class="features-section">
+      <h2>Why Choose DevBridge?</h2>
+      <div class="feature-cards">
+        <div class="feature-card">
+          <div class="feature-icon">
+            <i class="fas fa-code"></i>
+          </div>
+          <h3>Streamlined Development</h3>
+          <p>
+            Automate project setup and reduce repetitive tasks with DevBridge’s
+            integrated tools, allowing your team to focus on building features
+            rather than handling code errors .
+          </p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <i class="fas fa-users"></i>
+          </div>
+          <h3>Team Collaboration</h3>
+          <p>
+            Enable seamless teamwork with shared workspaces and real-time
+            communication, ensuring everyone stays aligned throughout the
+            project lifecycle.
+          </p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <i class="fas fa-chart-line"></i>
+          </div>
+          <h3>Visibility & Insights</h3>
+          <p>
+            Track progress , and make informed decisions thanks to built-in
+            analytics and reporting tools that give you a complete overview of
+            your projects.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="how-it-works">
+      <h2>How DevBridge Works</h2>
+      <div class="steps">
+        <div class="step">
+          <div class="step-number">1</div>
+          <h3>Create an Account</h3>
+          <p>Sign up for free and set up your development environment.</p>
+        </div>
+        <div class="step">
+          <div class="step-number">2</div>
+          <h3>Build Your Project</h3>
+          <p>
+            Use DevBridge’s powerful tools to scaffold, configure, and customize
+            your web application with ease.
+          </p>
+        </div>
+        <div class="step">
+          <div class="step-number">3</div>
+          <h3>Download Your Project</h3>
+          <p>
+            Export your ready-to-run project and start building — locally or in
+            your preferred environment.
+          </p>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-content">
+      <div class="footer-logo">
+        <img src="assets/devbridge-logo.png" alt="DevBridge Logo" />
+      </div>
+      <div class="footer-links">
+       
+        <div class="link-group">
+          <h4>Company</h4>
+          <a href="https://flesk.tn/">About Us</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 DevBridge. All rights reserved.</p>
+    </div>
+  </footer>
+</div>

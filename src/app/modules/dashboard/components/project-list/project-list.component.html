@@ -1,98 +1,114 @@
-<!-- project-list.component.html -->
 <div class="container">
-    <div class="header">
-      <h1>Projects Management</h1>
-      <button class="btn btn-primary" [routerLink]="['/dashboard/projects/new']">Add Project</button>
-    </div>
-  
+  <div class="header">
+    <h1>Projects</h1>
+  </div>
+
+  <div class="controls">
     <div class="search-container">
       <input 
         type="text" 
         class="search-input" 
-        placeholder="Search by project name or model name"
-        [ngModel]="searchText"
+        placeholder="Search projects..." 
+        [value]="searchText"
         (input)="onSearch($event)"
       >
     </div>
-  
-    <ul class="nav nav-tabs">
-      <li class="nav-item">
-        <a class="nav-link" [class.active]="selectedTab === 'All'" (click)="selectTab('All')">All Projects</a>
-      </li>
-    </ul>
-  
-    <div class="table-responsive">
-      <table class="table">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Project Name</th>
-            <th>Model Name</th>
-            <th>Framework</th>
-            <th>Created</th>
-            <th>Modified</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngIf="loading">
-            <td colspan="7" class="loading-message">Loading projects...</td>
-          </tr>
-          <tr *ngIf="!loading && error">
-            <td colspan="7" class="error-message">{{ error }}</td>
-          </tr>
-          <tr *ngIf="!loading && !error && filteredProjects.length === 0">
-            <td colspan="7" class="empty-message">No projects found.</td>
-          </tr>
-          <tr *ngFor="let project of filteredProjects">
-            <td>{{ project.id }}</td>
-            <td>{{ project.project_name }}</td>
-            <td>{{ project.model_name }}</td>
-            <td>{{ project.framework?.name || 'N/A' }}</td>
-            <td>{{ project.date_creation | date:'medium' }}</td>
-            <td>{{ project.date_modification | date:'medium' }}</td>
-            <td class="actions">
-              <button class="btn btn-info btn-sm" [routerLink]="['/dashboard/projects', project.id]">
-                See details
-              </button>
-              <button class="btn btn-warning btn-sm" [routerLink]="['/dashboard/projects/edit', project.id]">
-                Modify
-              </button>
-              <button class="btn btn-danger btn-sm" (click)="openConfirmDialog(project.id!)">
-                Delete
-              </button>
-              <button *ngIf="project.script_file" class="btn btn-secondary btn-sm" (click)="downloadScript(project.id!)">
-                Download Script
-              </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+
+    <div class="tabs">
+      <button 
+        class="tab-btn" 
+        [class.active]="selectedTab === 'All'" 
+        (click)="selectTab('All')"
+      >All</button>
+      <button 
+        class="tab-btn" 
+        [class.active]="selectedTab === 'Active'" 
+        (click)="selectTab('Active')"
+      >Active</button>
+      <button 
+        class="tab-btn" 
+        [class.active]="selectedTab === 'Archived'" 
+        (click)="selectTab('Archived')"
+      >Archived</button>
     </div>
-  
-    <!-- Pagination -->
-    <div class="pagination-container">
-      <button class="btn btn-outline-secondary" disabled>Previous</button>
-      <span class="page-number">1</span>
-      <button class="btn btn-outline-secondary" disabled>Next</button>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="loading" class="loading-container">
+    <div class="spinner"></div>
+    <p>Loading projects...</p>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="error" class="error-container">
+    <lucide-angular [name]="alertTriangleIcon"></lucide-angular>
+    <p>{{ error }}</p>
+    <button class="btn-retry" (click)="loadProjects()">
+      <lucide-angular [name]="refreshCwIcon"></lucide-angular> Retry
+    </button>
+  </div>
+
+  <!-- Projects Table -->
+  <div *ngIf="!loading && !error" class="table-container">
+    <table *ngIf="filteredProjects.length > 0" class="projects-table">
+      <thead>
+        <tr>
+          <th>Project Name</th>
+          <th>Tables</th>
+          <th>Framework</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let project of filteredProjects">
+          <td class="project-name">{{ project.project_name }}</td>
+          <td>{{ project.tables.length || 0 }} table(s)</td>
+          <td>{{ project.framework_name }}</td>
+          <!-- Actions cell -->
+          <td class="actions">
+            <button class="btn-icon view" [routerLink]="['/dashboard/projects', project.id]" title="View">
+              <lucide-angular [name]="eyeIcon"></lucide-angular>
+            </button>
+            <button class="btn-icon delete" (click)="openConfirmDialog(project.id!)" title="Delete">
+              <lucide-angular [name]="trash2Icon"></lucide-angular>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Empty State -->
+    <div *ngIf="filteredProjects.length === 0" class="empty-state">
+      <div class="empty-icon">
+        <lucide-angular [name]="folderOpenIcon"></lucide-angular>
+      </div>
+      <h3>No projects found</h3>
+      <p>Create a new project to get started with your development workflow.</p>
+      <button class="btn-primary" routerLink="/dashboard/projects/new">
+        <lucide-angular [name]="plusIcon"></lucide-angular> Create Project
+      </button>
     </div>
-  
-    <!-- Confirmation Dialog -->
-    <div class="modal" [class.show]="showConfirmDialog" *ngIf="showConfirmDialog">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">Confirm Delete</h5>
-            <button type="button" class="close" (click)="cancelDelete()">&times;</button>
-          </div>
-          <div class="modal-body">
-            <p>Are you sure you want to delete this project? This action cannot be undone.</p>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" (click)="cancelDelete()">Cancel</button>
-            <button type="button" class="btn btn-danger" (click)="confirmDelete()">Delete</button>
-          </div>
+  </div>
+
+  <!-- Confirmation Dialog -->
+  <div *ngIf="showConfirmDialog" class="dialog-overlay">
+    <div class="dialog">
+      <div class="dialog-header">
+        <h3>Confirm Delete</h3>
+        <button class="btn-close" (click)="cancelDelete()">
+          <lucide-angular [name]="xIcon"></lucide-angular>
+        </button>
+      </div>
+      <div class="dialog-content">
+        <div class="warning-icon">
+          <lucide-angular [name]="alertTriangleIcon"></lucide-angular>
         </div>
+        <p>Are you sure you want to delete this project? This action cannot be undone.</p>
+      </div>
+      <div class="dialog-actions">
+        <button class="btn-secondary" (click)="cancelDelete()">Cancel</button>
+        <button class="btn-danger" (click)="confirmDelete()">Delete Project</button>
       </div>
     </div>
   </div>
+</div>

@@ -1,14 +1,23 @@
-import { Framework } from './framework';
-import { Field } from '../../modules/project/services/project.service';
+// src/app/core/models/project.ts
 
 export interface Project {
   id?: number;
   project_name: string;
-  model_name: string;
-  framework?: Framework | null;
-  user?: number | null;
-  date_creation: string;
-  date_modification: string;
+  tables: Array<{
+    table_name: string;
+    fields: Array<{
+      name: string;
+      type: string;
+    }>;
+  }>;
+  framework: number | null;
+  framework_name?: string;
+  user?: number;
+  username?: string;
+  date_creation?: string;
+  date_modification?: string;
   script_file?: string | null;
-  fields?: Field[];
+  script_url?: string | null;
+  zip_file?: string | null;
+  zip_url?: string | null;
 }

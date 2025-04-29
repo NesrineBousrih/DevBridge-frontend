@@ -23,7 +23,7 @@ import { RouterLink } from '@angular/router';
 export class SidebarComponent implements OnInit {
   menuItems = [
     { label: 'Dashboard', icon: Home, route: '/dashboard' },
-    { label: 'Projects', icon: FolderKanban, route: '/projects' },
+    { label: 'Projects', icon: FolderKanban, route: '/dashboard/projects' },
     { label: 'Users', icon: User, route: '/dashboard/users' },
     { label: 'Frameworks', icon: BarChart3, route: '/dashboard/frameworks' },
   ];

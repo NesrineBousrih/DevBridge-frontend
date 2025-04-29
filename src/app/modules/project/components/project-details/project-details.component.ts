@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ProjectService, Project } from '../../services/project.service';
+import { ProjectService } from '../../services/project.service';
 import { ProjectDetailsService } from '../../services/project-details.service';
 import { CommonModule } from '@angular/common';
-import { LucideAngularModule } from 'lucide-angular';
+import { List, LucideAngularModule } from 'lucide-angular';
 import { 
   Download, 
   Code, 
@@ -13,9 +13,16 @@ import {
   ArrowRight, 
   Terminal,
   Copy,
-  Check
+  Check,
+  Folder,
+  Package,
+  FileCode,
+  Info,
+  File
 } from 'lucide-angular';
+import { Project } from '../../../../core/models/project';
 
+type TabType = 'script' | 'zip'; // Define a union type for the tabs
 
 @Component({
   selector: 'app-project-details',
@@ -30,6 +37,7 @@ export class ProjectDetailsComponent implements OnInit {
   loading = true;
   error = false;
   errorMessage = '';
+  activeTab: TabType = 'script'; // Default active tab with proper type
 
   downloadIcon = Download;
   codeIcon = Code;
@@ -40,7 +48,13 @@ export class ProjectDetailsComponent implements OnInit {
   arrowRightIcon = ArrowRight;
   copyIcon = Copy;
   checkIcon = Check;
-  
+  fileCodeIcon = FileCode;
+  folderIcon = Folder;
+  packageIcon = Package;
+  infoIcon = Info;
+  listIcon = List;
+  fileIcon = File; // Add fileIcon
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -83,6 +97,21 @@ export class ProjectDetailsComponent implements OnInit {
     });
   }
 
+  setActiveTab(tab: TabType): void {
+    this.activeTab = tab;
+  }
+
+  copyToClipboard(text: string): void {
+    navigator.clipboard.writeText(text)
+      .then(() => {
+        console.log('Text copied to clipboard');
+        // You could add a toast notification here
+      })
+      .catch(err => {
+        console.error('Could not copy text: ', err);
+      });
+  }
+
   downloadScript(): void {
     if (!this.project || !this.project.id) {
       console.error('Cannot download script: Project ID is missing');
@@ -96,31 +125,46 @@ export class ProjectDetailsComponent implements OnInit {
       downloadBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Downloading...';
     }
     
-    this.projectDetailsService.downloadScript(this.project.id).subscribe({
-      next: (success: boolean) => {
-        console.log('Script downloaded successfully');
-        // Reset button
-        if (downloadBtn) {
-          downloadBtn.disabled = false;
-          downloadBtn.textContent = 'Download Script';
-        }
-      },
-      error: (err: any) => {
-        console.error('Error downloading script', err);
-        
-        // Try alternative method if direct download fails
-        if (this.project.script_url) {
-          console.log('Attempting direct download from URL:', this.project.script_url);
-          window.open(this.project.script_url, '_blank');
-        } else {
-          alert('Failed to download script. Please try again later.');
-        }
-        
-        // Reset button
-        if (downloadBtn) {
-          downloadBtn.disabled = false;
-          downloadBtn.textContent = 'Download Script';
-        }
-      }
-    });
-  }}
+    // Try alternative method if direct download fails
+    if (this.project.script_url) {
+      console.log('Attempting direct download from URL:', this.project.script_url);
+      window.open(this.project.script_url, '_blank');
+    } else {
+      alert('Failed to download script. Please try again later.');
+    }
+    
+    // Reset button
+    if (downloadBtn) {
+      downloadBtn.disabled = false;
+      downloadBtn.textContent = 'Download Script';
+    }
+  }
+
+  downloadZip(): void {
+    if (!this.project || !this.project.id) {
+      console.error('Cannot download ZIP: Project ID is missing');
+      return;
+    }
+    
+    // Show loading indicator or disable button
+    const downloadZipBtn = document.querySelector('[data-download-zip-btn]') as HTMLButtonElement;
+    if (downloadZipBtn) {
+      downloadZipBtn.disabled = true;
+      downloadZipBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Downloading...';
+    }
+    // Try alternative method if direct download fails
+    if (this.project.zip_file) {
+      console.log('Attempting direct download from URL:', this.project.zip_file);
+      window.open(this.project.zip_file, '_blank');
+    } else {
+      alert('Failed to download zipfile. Please try again later.');
+    }
+    
+    // Reset button
+    if (downloadZipBtn) {
+      downloadZipBtn.disabled = false;
+      downloadZipBtn.textContent = 'Download ZIP';
+    }
+  }
+ 
+}
