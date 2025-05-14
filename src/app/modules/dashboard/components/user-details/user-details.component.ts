@@ -1,4 +1,3 @@
-// Modified user-detail.component.ts
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
@@ -39,6 +38,10 @@ export class UserDetailComponent implements OnInit {
     this.userService.getUserById(id).subscribe({
       next: (user) => {
         this.user = user || null;
+        // If user_type is not set, default to developer
+        if (this.user && !this.user.user_type) {
+          this.user.user_type = 'developer';
+        }
         this.loading = false;
       },
       error: (error) => {

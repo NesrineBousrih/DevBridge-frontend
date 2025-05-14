@@ -132,7 +132,10 @@ export class HomeComponent implements OnInit {
     this.projectIdToDelete = id;
     this.showConfirmDialog = true;
   }
-
+  goToProfile(): void {
+    this.router.navigate(['/developer-profile/']);
+  }
+  
   // Close the dialog without deleting
   cancelDelete(): void {
     this.showConfirmDialog = false;

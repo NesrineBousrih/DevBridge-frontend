@@ -1,7 +1,8 @@
 /* sidebar.component.css */
 .sidebar-container {
-  height: 100vh;
+  height: 100vh; /* Ensure the sidebar takes full viewport height */
   display: flex;
+  flex-direction: column; /* Allow the sidebar to expand vertically */
 }
 
 .toggle-btn {
@@ -26,11 +27,13 @@
 .sidebar {
   position: relative;
   width: 250px;
-  height: 100vh;
-  background-color:#2d6459;
+  background-color: #2d6459;
   color: white;
   padding: 15px;
   transition: all 0.3s ease;
+  flex-grow: 1; /* Allow the sidebar to grow and fill remaining space */
+  display: flex;
+  flex-direction: column; /* Ensure the sidebar content is stacked vertically */
 }
 
 .sidebar.collapsed {
@@ -42,6 +45,7 @@
   list-style-type: none;
   padding: 0;
   margin-top: 20px;
+  flex-grow: 1; /* Make the list take remaining space */
 }
 
 .sidebar ul li {
@@ -64,10 +68,36 @@
   width: 0;
   display: none;
 }
+
 .sidebar ul li a span {
   font-size: medium;
 }
 
 .sidebar ul li a:hover {
-  background-color:#2d6459;
+  background-color: #2d6459;
+}
+
+@media screen and (max-width: 768px) {
+  .sidebar {
+    width: 200px;
+  }
+
+  .sidebar.collapsed {
+    width: 50px;
+  }
+}
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  display: flex;
+}
+.app-layout {
+  display: flex;
+  height: 100vh; /* VERY important */
+}
+
+.main-content {
+  flex: 1;
+  overflow: auto;
 }

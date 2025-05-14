@@ -1,4 +1,3 @@
-// src/app/core/services/toast.service.ts
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 
@@ -12,9 +11,6 @@ export interface ToastMessage {
   providedIn: 'root'
 })
 export class ToastService {
-  success(arg0: string) {
-    throw new Error('Method not implemented.');
-  }
   private toastSubject = new Subject<ToastMessage>();
   public toast$ = this.toastSubject.asObservable();
 

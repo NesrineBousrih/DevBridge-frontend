@@ -1,4 +1,4 @@
-// src/app/core/models/project.ts
+
 
 export interface Project {
   id?: number;
@@ -20,4 +20,5 @@ export interface Project {
   script_url?: string | null;
   zip_file?: string | null;
   zip_url?: string | null;
+  status: string;
 }

@@ -62,14 +62,25 @@ export class UserListComponent implements OnInit {
   }
   
   applyFilters(): void {
-    this.filteredUsers = [...this.users];
+    // Start with all users
+    let filtered = [...this.users];
     
+    // Apply search filter if text is present
     if (this.searchText.trim()) {
       const search = this.searchText.toLowerCase();
-      this.filteredUsers = this.filteredUsers.filter(user => 
+      filtered = filtered.filter(user => 
         user.username.toLowerCase().includes(search)
       );
     }
+    
+    // Apply user type filter based on selected tab
+    if (this.selectedTab !== 'All') {
+      filtered = filtered.filter(user => 
+        user.user_type.toLowerCase() === this.selectedTab.toLowerCase()
+      );
+    }
+    
+    this.filteredUsers = filtered;
   }
   
   onSearch(event: Event): void {

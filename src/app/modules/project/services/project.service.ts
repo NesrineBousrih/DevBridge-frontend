@@ -9,6 +9,9 @@ import { Project } from '../../../core/models/project';
   providedIn: 'root',
 })
 export class ProjectService {
+  updateTables(projectId: number, arg1: string, arg2: { table_name: any; }) {
+    throw new Error('Method not implemented.');
+  }
   private apiUrl = 'http://127.0.0.1:8000/api/projects';
 
   constructor(private http: HttpClient) {}
@@ -132,7 +135,41 @@ export class ProjectService {
       .delete(`${this.apiUrl}/${id}/`, { headers: this.getHeaders() })
       .pipe(catchError(this.handleError));
   }
+  // Add this method to your ProjectService class
 
+  // Add this method to your existing ProjectService class
+
+  updateProjectTable(
+    projectId: number,
+    payload: {
+      operation: string;
+      table_data: {
+        table_name: string;
+        fields?: Array<{
+          name: string;
+          type: string;
+        }>;
+      };
+    }
+  ): Observable<any> {
+    console.log('Updating project table with ID:', projectId);
+    console.log('Payload:', payload);
+  
+    return this.http
+      .post<any>(
+        `${this.apiUrl}/${projectId}/`,
+        payload, // Send the payload as the request body
+        { headers: this.getHeaders() }
+      )
+      .pipe(
+        map((response) => {
+          console.log(`Table ${payload.operation} successful:`, response);
+          return response;
+        }),
+        catchError(this.handleError)
+      );
+  }
+  
   // Connect to database
   connectToDatabase(connectionData: {
     host: string;

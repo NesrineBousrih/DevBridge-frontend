@@ -93,10 +93,10 @@ export class ProjectListComponent implements OnInit {
     // Apply tab filter
     if (this.selectedTab === 'Active') {
       // Define your active filter logic here
-      // For example: this.filteredProjects = this.filteredProjects.filter(project => !project.isArchived);
+      this.filteredProjects = this.filteredProjects.filter(project => project.status === 'active');
     } else if (this.selectedTab === 'Archived') {
       // Define your archived filter logic here
-      // For example: this.filteredProjects = this.filteredProjects.filter(project => project.isArchived);
+      this.filteredProjects = this.filteredProjects.filter(project => project.status === 'archived');
     }
     
     // Apply search filter
@@ -104,7 +104,8 @@ export class ProjectListComponent implements OnInit {
       const search = this.searchText.toLowerCase();
       this.filteredProjects = this.filteredProjects.filter(project => 
         project.project_name.toLowerCase().includes(search) ||
-        project.framework_name?.toLowerCase().includes(search) ||
+        (project.username && project.username.toLowerCase().includes(search)) ||
+        (project.framework_name && project.framework_name.toLowerCase().includes(search)) ||
         // Add more searchable fields as needed
         project.tables.some(table => table.table_name.toLowerCase().includes(search))
       );

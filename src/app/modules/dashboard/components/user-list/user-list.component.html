@@ -19,6 +19,13 @@
     <button [class.active]="selectedTab === 'All'" (click)="selectTab('All')">
       All Users
     </button>
+    <!-- Added new tabs for filtering by user type -->
+    <button [class.active]="selectedTab === 'Developer'" (click)="selectTab('Developer')">
+      Developers
+    </button>
+    <button [class.active]="selectedTab === 'Admin'" (click)="selectTab('Admin')">
+      Admins
+    </button>
   </div>
 
   <!-- Confirmation Dialog -->
@@ -43,6 +50,7 @@
         <tr>
           <th>ID</th>
           <th>Username</th>
+          <th>User Type</th>
           <th>Actions</th>
         </tr>
       </thead>
@@ -51,6 +59,7 @@
         <tr>
           <td>{{ user.id }}</td>
           <td>{{ user.username }}</td>
+          <td>{{ user.user_type | titlecase }}</td>
           <td class="actions">
             <button
               class="btn details-btn"
@@ -74,7 +83,7 @@
         </tr>
         } @empty {
         <tr>
-          <td colspan="3" class="no-data">No users found</td>
+          <td colspan="4" class="no-data">No users found</td>
         </tr>
         }
       </tbody>

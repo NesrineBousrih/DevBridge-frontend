@@ -1,0 +1,88 @@
+<div class="dashboard-container">
+    <!-- Header -->
+   
+  
+    <main class="dashboard-main">
+      <!-- Navigation -->
+     
+  
+      <!-- Quick Actions -->
+     
+  
+      <!-- Dashboard Grid -->
+      <div class="dashboard-grid">
+        <!-- Project Statistics -->
+        <div class="dashboard-card">
+          <div class="card-header">
+            <h2>Project Overview</h2>
+            <span>Total: {{ totalProjects }} projects</span>
+          </div>
+          <div class="card-content chart-container">
+            <canvas baseChart
+              [type]="projectStatusChartType"
+              [data]="projectStatusChartData"
+              [options]="projectStatusChartOptions">
+            </canvas>
+          </div>
+        </div>
+        
+        <!-- Technology Stack -->
+        <div class="dashboard-card">
+          <div class="card-header">
+            <h2>Technology Distribution</h2>
+            <i-lucide [name]="codeIcon" [size]="20"></i-lucide>
+          </div>
+          <div class="card-content chart-container">
+            <canvas baseChart
+              [type]="techStackChartType"
+              [data]="techStackChartData"
+              [options]="techStackChartOptions">
+            </canvas>
+          </div>
+        </div>
+        
+        <!-- User Activity -->
+        <div class="dashboard-card">
+          <div class="card-header">
+            <h2>Weekly Activity</h2>
+            <i-lucide [name]="activityIcon" [size]="20"></i-lucide>
+          </div>
+          <div class="card-content chart-container">
+            <canvas baseChart
+              [type]="activityChartType"
+              [data]="activityChartData"
+              [options]="activityChartOptions">
+            </canvas>
+          </div>
+        </div>
+        
+       
+        
+        
+        
+        <!-- Recent Activities -->
+        <div class="dashboard-card">
+          <div class="card-header">
+            <h2>Recent Activities</h2>
+            <i-lucide [name]="activityIcon" [size]="20"></i-lucide>
+          </div>
+          <div class="card-content">
+            <ul class="activity-list">
+              <li class="activity-item" *ngFor="let activity of recentActivities">
+                <div class="activity-avatar">
+                  {{ activity.user.charAt(0) }}
+                </div>
+                <div class="activity-info">
+                  <p class="activity-title">{{ activity.user }} • {{ activity.action }}</p>
+                  <p class="activity-subtitle">{{ activity.project }} • {{ activity.time }}</p>
+                </div>
+              </li>
+            </ul>
+            <div class="view-all">
+              <a href="javascript:void(0)">View all activity →</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>

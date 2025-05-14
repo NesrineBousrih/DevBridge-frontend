@@ -1,0 +1,183 @@
+<div class="profile-container">
+  <div class="profile-header">
+    <h2>Your Profile</h2>
+    <p class="subtitle">Manage your account information</p>
+  </div>
+
+  @if (loading) {
+    <div class="loading-indicator">
+      <span class="loader"></span>
+      <span>Loading profile data...</span>
+    </div>
+  } @else {
+    <form [formGroup]="profileForm" (ngSubmit)="onSubmit()" class="profile-form">
+      <div class="form-section">
+        <div class="section-title">
+          <h3>Account Information</h3>
+        </div>
+
+        <div class="profile-info-container">
+          <div class="profile-details">
+            <div class="form-group">
+              <label for="username">Username</label>
+              <input
+                type="text"
+                id="username"
+                formControlName="username"
+                class="form-control"
+                [class.is-invalid]="profileForm.get('username')?.invalid && profileForm.get('username')?.touched"
+              />
+              @if (profileForm.get('username')?.invalid && profileForm.get('username')?.touched) {
+                <div class="error-message">
+                  @if (profileForm.get('username')?.errors?.['required']) {
+                    <span>Username is required</span>
+                  } @else if (profileForm.get('username')?.errors?.['minlength']) {
+                    <span>Username must be at least 3 characters</span>
+                  }
+                </div>
+              }
+            </div>
+
+            <div class="form-group">
+              <label for="email">Email</label>
+              <input
+                type="email"
+                id="email"
+                formControlName="email"
+                class="form-control"
+                [class.is-invalid]="profileForm.get('email')?.invalid && profileForm.get('email')?.touched"
+              />
+              @if (profileForm.get('email')?.invalid && profileForm.get('email')?.touched) {
+                <div class="error-message">
+                  @if (profileForm.get('email')?.errors?.['required']) {
+                    <span>Email is required</span>
+                  } @else if (profileForm.get('email')?.errors?.['email']) {
+                    <span>Please enter a valid email address</span>
+                  }
+                </div>
+              }
+            </div>
+
+            <div class="user-type-display">
+              <label>Account Type:</label>
+              <span class="user-type-badge">{{ currentUser?.user_type | titlecase }}</span>
+            </div>
+          </div>
+          
+          <div class="profile-photo-container">
+            <div class="form-group">
+              <label for="profilePhoto">Profile Photo</label>
+              
+              <!-- Remove formControlName from file input -->
+              <input
+                type="file"
+                id="profilePhoto"
+                class="file-input"
+                accept="image/*"
+                (change)="onFileChange($event)"
+                #fileInput
+              />
+              
+              <!-- Clickable photo preview -->
+              <div class="preview-container" (click)="fileInput.click()">
+                @if (photoPreview) {
+                  <img [src]="photoPreview" alt="Profile photo preview" class="photo-preview" />
+                  <div class="profile-photo-overlay">
+                    <span>Change Photo</span>
+                  </div>
+                } @else if (currentUser?.profile_photo) {
+                  <img [src]="currentUser?.profile_photo" alt="Current profile photo" class="photo-preview" />
+                  <div class="profile-photo-overlay">
+                    <span>Change Photo</span>
+                  </div>
+                } @else {
+                  <div class="photo-placeholder">
+                    <span>{{ getInitials() }}</span>
+                  </div>
+                  <div class="profile-photo-overlay">
+                    <span>Add Photo</span>
+                  </div>
+                }
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Rest of the form remains the same -->
+      <div class="form-section">
+        <div class="section-title">
+          <h3>Password</h3>
+          <button type="button" class="toggle-btn" (click)="toggleChangePassword()">
+            {{ changePassword ? 'Cancel' : 'Change Password' }}
+          </button>
+        </div>
+
+        @if (changePassword) {
+          <div class="password-form">
+            <div class="form-group">
+              <label for="currentPassword">Current Password</label>
+              <input
+                type="password"
+                id="currentPassword"
+                formControlName="currentPassword"
+                class="form-control"
+                [class.is-invalid]="profileForm.get('currentPassword')?.invalid && profileForm.get('currentPassword')?.touched"
+              />
+              @if (profileForm.get('currentPassword')?.invalid && profileForm.get('currentPassword')?.touched) {
+                <div class="error-message">
+                  <span>Current password is required</span>
+                </div>
+              }
+            </div>
+
+            <div class="form-group">
+              <label for="newPassword">New Password</label>
+              <input
+                type="password"
+                id="newPassword"
+                formControlName="newPassword"
+                class="form-control"
+                [class.is-invalid]="profileForm.get('newPassword')?.invalid && profileForm.get('newPassword')?.touched"
+              />
+              @if (profileForm.get('newPassword')?.invalid && profileForm.get('newPassword')?.touched) {
+                <div class="error-message">
+                  @if (profileForm.get('newPassword')?.errors?.['required']) {
+                    <span>New password is required</span>
+                  } @else if (profileForm.get('newPassword')?.errors?.['minlength']) {
+                    <span>Password must be at least 6 characters</span>
+                  }
+                </div>
+              }
+            </div>
+
+            <div class="form-group">
+              <label for="confirmPassword">Confirm New Password</label>
+              <input
+                type="password"
+                id="confirmPassword"
+                formControlName="confirmPassword"
+                class="form-control"
+                [class.is-invalid]="profileForm.get('confirmPassword')?.invalid && profileForm.get('confirmPassword')?.touched"
+              />
+              @if (profileForm.get('confirmPassword')?.invalid && profileForm.get('confirmPassword')?.touched) {
+                <div class="error-message">
+                  <span>Password confirmation is required</span>
+                </div>
+              }
+            </div>
+          </div>
+        }
+      </div>
+
+      <div class="button-group">
+        <button type="button" class="cancel-btn" routerLink="/dashboard">
+          Back to Projects
+        </button>
+        <button type="submit" class="submit-btn" [disabled]="profileForm.invalid || loading">
+          {{ loading ? 'Saving...' : 'Save Changes' }}
+        </button>
+      </div>
+    </form>
+  }
+</div>

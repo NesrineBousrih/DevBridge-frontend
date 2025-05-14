@@ -1,56 +1,64 @@
-  <div class="user-detail-container">
-      <div class="user-detail-card">
-        <div class="card-header">
-          <h2>User Details</h2>
-          <div class="button-group">
-            <button class="back-btn" (click)="goBack()">
-              <i class="fa fa-arrow-left"></i> Back
-            </button>
-          </div>
-        </div>
-    
-        @if (loading) {
-          <div class="loading">
-            Loading user details...
-          </div>
-        }
-    
-        @if (error) {
-          <div class="error-message">
-            {{ error }}
-          </div>
-        }
-    
-        @if (user && !loading) {
-          <div class="user-info">
-            <div class="info-group">
-              <span class="label">ID:</span>
-              <span class="value">{{ user.id }}</span>
-            </div>
-            
-            <div class="info-group">
-              <span class="label">Username:</span>
-              <span class="value">{{ user.username }}</span>
-            </div>
-            
-          
-            
-            <div class="info-group">
-              <span class="label">Password:</span>
-              <span class="value password">••••••••</span>
-            </div>
-          </div>
-        }
-    
-        @if (user && !loading) {
-          <div class="action-buttons">
-            <button class="edit-btn" (click)="onEdit()">
-              <i class="fa fa-edit"></i> Edit User
-            </button>
-            <button class="delete-btn" (click)="onDelete()">
-              <i class="fa fa-trash"></i> Delete User
-            </button>
-          </div>
-        }
+<div class="user-detail-container">
+  <div class="user-detail-card">
+    <div class="card-header">
+      <h2>User Details</h2>
+      <div class="button-group">
+        <button class="back-btn" (click)="goBack()">
+          <i class="fa fa-arrow-left"></i> Back
+        </button>
       </div>
     </div>
+
+    @if (loading) {
+      <div class="loading">
+        Loading user details...
+      </div>
+    }
+
+    @if (error) {
+      <div class="error-message">
+        {{ error }}
+      </div>
+    }
+
+    @if (user && !loading) {
+      <div class="user-info">
+        <div class="info-group">
+          <span class="label">ID:</span>
+          <span class="value">{{ user.id }}</span>
+        </div>
+        
+        <div class="info-group">
+          <span class="label">Username:</span>
+          <span class="value">{{ user.username }}</span>
+        </div>
+        
+        <div class="info-group">
+          <span class="label">User Type:</span>
+          <span class="value">{{ user.user_type | titlecase }}</span>
+        </div>
+        
+        <div class="info-group">
+          <span class="label">Email:</span>
+          <span class="value">{{ user.email }}</span>
+        </div>
+        
+        <div class="info-group">
+          <span class="label">Password:</span>
+          <span class="value password">••••••••</span>
+        </div>
+      </div>
+    }
+
+    @if (user && !loading) {
+      <div class="action-buttons">
+        <button class="edit-btn" (click)="onEdit()">
+          <i class="fa fa-edit"></i> Edit User
+        </button>
+        <button class="delete-btn" (click)="onDelete()">
+          <i class="fa fa-trash"></i> Delete User
+        </button>
+      </div>
+    }
+  </div>
+</div>

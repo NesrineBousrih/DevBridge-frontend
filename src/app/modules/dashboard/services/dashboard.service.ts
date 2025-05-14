@@ -15,11 +15,7 @@ export class DashboardService {
     return this.http.get<any>(`${this.apiUrl}user/`);
   }
 
-  // Récupérer les notifications
-  getNotifications(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}notifications/`);
-  }
-
+ 
   // Récupérer les éléments de la sidebar
   getMenuItems(): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}sidebar/`);

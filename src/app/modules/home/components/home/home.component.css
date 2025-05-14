@@ -1,67 +1,111 @@
-/* home.component.css - Updated with diverse but harmonious colors */
-body {
+/* Global Styles */
+* {
   margin: 0;
   padding: 0;
-  font-family: "Poppins", sans-serif;
+  box-sizing: border-box;
+  font-family: 'Inter', 'Segoe UI', Roboto, Arial, sans-serif;
 }
 
-.home-container {
+body {
   background-color: #f8f9fa;
+  color: #333;
+}
+
+/* Container */
+.home-container {
+  display: flex;
+  flex-direction: column;
   min-height: 100vh;
-  color: #333333;
 }
 
+/* Header Styles */
 .header {
-  background-color: #ffffff;
-  padding: 1.25rem 2rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
   display: flex;
+  align-items: center;
   justify-content: space-between;
-  align-items: center;
+  padding: 1rem 2rem;
+  background-color: #ffffff;
   border-bottom: 1px solid #e9ecef;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+  position: sticky;
+  top: 0;
+  z-index: 100;
 }
 
-.logo  {
-  color: #15803d;
-  font-size: 1rem;
-  font-weight: 100;
-  margin: 0;
+.logo img {
+  height: 36px;
 }
 
-.search-bar {
-  background-color: #f0fdf4;
-  border-radius: 8px;
-  padding: 0.6rem 1rem;
-  width: 280px;
+/* User Dropdown */
+.user-dropdown {
+  position: relative;
+}
+
+
+.dropdown-menu button {
   display: flex;
   align-items: center;
-  border: 1px solid #dcfce7;
+  gap: 8px;
+  padding: 8px 12px;
+  background: none;
+  border: none;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+}
+
+.profile-btn:hover,
+.logout-btn:hover {
+  background-color: #f0f0f0;
+}
+
+
+/* Search Bar */
+.search-bar {
+  display: flex;
+  align-items: center;
+  background-color: #f1f3f5;
+  border-radius: 8px;
+  padding: 8px 16px;
+  max-width: 400px;
+  width: 100%;
+  transition: all 0.2s;
+  border: 1px solid transparent;
+}
+
+.search-bar:focus-within {
+  border-color: #28a745;
+  box-shadow: 0 0 0 3px rgba(40, 167, 69, 0.15);
+}
+
+.search-bar lucide-icon {
+  color: #6c757d;
+  margin-right: 8px;
 }
 
 .search-bar input {
-  background-color: transparent;
+  flex: 1;
   border: none;
+  background: none;
+  font-size: 14px;
   color: #495057;
-  width: 100%;
   outline: none;
-  font-size: 0.95rem;
 }
 
 .search-bar input::placeholder {
   color: #adb5bd;
 }
 
-.search-bar lucide-icon {
-  color: #16a34a;
-  margin-right: 0.5rem;
-}
-
+/* Main Content */
 main {
+  flex: 1;
   padding: 2rem;
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
+  width: 100%;
 }
 
+/* Projects Header */
 .projects-header {
   display: flex;
   justify-content: space-between;
@@ -70,315 +114,315 @@ main {
 }
 
 .projects-header h2 {
-  font-size: 1.8rem;
-  font-weight: 700;
-  color: #166534;
-  margin: 0;
+  font-size: 1.75rem;
+  font-weight: 600;
+  color: #212529;
   position: relative;
 }
 
 .projects-header h2::after {
-  content: "";
+  content: '';
   position: absolute;
-  bottom: -8px;
   left: 0;
-  width: 50px;
-  height: 4px;
-  background-color: #22c55e;
+  bottom: -8px;
+  width: 40px;
+  height: 3px;
+  background-color: #28a745;
   border-radius: 2px;
 }
 
+/* Create Button */
 .create-btn {
-  background-color: #16a34a;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  padding: 0.75rem 1.25rem;
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  box-shadow: 0 2px 8px rgba(22, 163, 74, 0.3);
-  transition: all 0.2s ease;
+  gap: 8px;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 10px 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
 }
 
 .create-btn:hover {
-  background-color: #15803d;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(22, 163, 74, 0.4);
+  background-color: #218838;
 }
 
+/* Empty State */
+.empty-state, .no-results {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+  text-align: center;
+}
+
+.empty-state lucide-icon {
+  color: #adb5bd;
+  margin-bottom: 1.5rem;
+}
+
+.empty-state h3, .no-results h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #495057;
+  margin-bottom: 0.5rem;
+}
+
+.empty-state p, .no-results p {
+  color: #6c757d;
+  margin-bottom: 2rem;
+}
+
+/* Projects Grid */
 .projects-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 1.5rem;
 }
 
+/* Project Card */
 .project-card {
-  background-color: #ffffff;
+  background-color: #fff;
   border-radius: 12px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
   padding: 1.5rem;
-  position: relative;
+  transition: transform 0.2s, box-shadow 0.2s;
   display: flex;
   flex-direction: column;
-  border-top: 5px solid #16a34a;
-  transition: all 0.3s ease;
 }
 
 .project-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+  transform: translateY(-3px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .project-header {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
+  align-items: center;
   margin-bottom: 1rem;
 }
 
 .project-header lucide-icon {
-  color: #16a34a;
-  width: 24px;
-  height: 24px;
+  color: #fd7e14;
 }
 
 .project-progress {
   display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 0.25rem;
+  align-items: center;
+  gap: 8px;
 }
 
 .progress-bar {
-  width: 80px;
-  height: 8px;
-  background-color: #f0fdf4;
-  border-radius: 4px;
+  width: 100px;
+  height: 6px;
+  background-color: #e9ecef;
+  border-radius: 3px;
   overflow: hidden;
 }
 
 .progress-fill {
   height: 100%;
-  background-color: #22c55e;
-  border-radius: 4px;
+  background-color: #fd7e14;
+  border-radius: 3px;
 }
 
 .project-card h3 {
-  font-size: 1.3rem;
-  font-weight: 700;
+  font-size: 1.125rem;
+  font-weight: 600;
   color: #212529;
-  margin: 0.5rem 0;
+  margin-bottom: 0.5rem;
 }
 
 .project-card p {
+  font-size: 0.875rem;
   color: #6c757d;
-  font-size: 0.95rem;
-  margin: 0;
-  flex-grow: 1;
+  margin-bottom: 1.5rem;
 }
 
+/* Equal size for view and delete buttons */
 .project-footer {
+  margin-top: auto;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 1.5rem;
+  flex-direction: column;
+  gap: 10px;
 }
 
 .date {
-  font-size: 0.85rem;
+  font-size: 0.75rem;
   color: #6c757d;
+  margin-bottom: 0.5rem;
 }
-.project-actions {
+
+.view-btn, .delete-btn {
+  width: 100%;
+  padding: 8px 0;
+  border-radius: 6px;
+  font-weight: 500;
+  font-size: 0.875rem;
+  cursor: pointer;
   display: flex;
-  gap: 8px;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s;
+}
+
+.view-btn {
+  background-color: #fff;
+  color: #fd7e14;
+  border: 1px solid #fd7e14;
+}
+
+.view-btn:hover {
+  background-color: #fff3e0;
 }
 
 .delete-btn {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  padding: 8px 12px;
   background-color: #fff;
-  border: 1px solid #e53935;
-  border-radius: 4px;
-  color: #e53935;
-  font-size: 14px;
-  cursor: pointer;
-  transition: all 0.2s ease;
+  color: #dc3545;
+  border: 1px solid #dc3545;
 }
 
 .delete-btn:hover {
   background-color: #ffebee;
 }
 
-.view-btn {
-  background-color: #f0fdf4;
-  color: #16a34a;
-  border: 1px solid #16a34a;
-  border-radius: 6px;
-  padding: 0.5rem 1rem;
-  font-size: 0.9rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.view-btn:hover {
-  background-color: #16a34a;
-  color: #ffffff;
-}
-
-/* New project card - make it stand out */
+/* Add Project Card */
 .add-card {
-  border: 2px dashed #bbf7d0;
-  background-color: #f0fdf4;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   cursor: pointer;
-  border-top: none;
-  transition: all 0.3s ease;
+  background-color: #e8f5e9;
+  border: 2px dashed #28a745;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
 }
 
 .add-card:hover {
-  background-color: #dcfce7;
-  border-color: #22c55e;
+  background-color: #d4edda;
 }
 
 .add-project {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.75rem;
-  padding: 2rem 0;
+  gap: 12px;
 }
 
 .add-project lucide-icon {
-  color: #16a34a;
+  color: #28a745;
 }
 
 .add-project span {
-  color: #16a34a;
-  font-weight: 600;
+  color: #28a745;
+  font-weight: 500;
 }
 
-.empty-state {
-  background-color: #ffffff;
-  border-radius: 12px;
-  padding: 4rem 2rem;
-  text-align: center;
+/* Confirmation Dialog */
+.confirm-dialog-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
   display: flex;
-  flex-direction: column;
   align-items: center;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  justify-content: center;
+  z-index: 1000;
 }
 
-.empty-state lucide-icon {
-  color: #bbf7d0;
+.confirm-dialog {
+  background-color: #fff;
+  border-radius: 12px;
+  padding: 2rem;
+  width: 400px;
+  max-width: 90vw;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+.confirm-dialog h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: #212529;
+}
+
+.confirm-dialog p {
+  color: #495057;
   margin-bottom: 1.5rem;
 }
 
-.empty-state h3 {
-  color: #212529;
-  font-size: 1.5rem;
-  font-weight: 700;
-  margin: 0 0 0.5rem;
+.dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
 }
 
-.empty-state p {
-  color: #6c757d;
-  margin: 0 0 2rem;
-  font-size: 1rem;
+.cancel-btn, .confirm-btn {
+  padding: 10px 16px;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
 }
 
-.no-results {
-  background-color: #ffffff;
-  border-radius: 12px;
-  padding: 3rem 2rem;
-  text-align: center;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+.cancel-btn {
+  background-color: #f8f9fa;
+  color: #495057;
+  border: 1px solid #ced4da;
 }
 
-.no-results h3 {
-  color: #212529;
-  font-size: 1.3rem;
-  font-weight: 700;
-  margin: 0 0 0.5rem;
+.cancel-btn:hover {
+  background-color: #e9ecef;
 }
 
-.no-results p {
-  color: #6c757d;
-  margin: 0;
-  font-size: 1rem;
+.confirm-btn {
+  background-color: #dc3545;
+  color: white;
+  border: none;
 }
 
-/* E-commerce project - amber/orange */
-.project-card:nth-of-type(1) {
-  border-top-color: #d97706;
-}
-.project-card:nth-of-type(1) .project-header lucide-icon {
-  color: #d97706;
-}
-.project-card:nth-of-type(1) .view-btn {
-  color: #d97706;
-  border-color: #d97706;
-  background-color: #fffbeb;
-}
-.project-card:nth-of-type(1) .view-btn:hover {
-  background-color: #d97706;
-  color: #ffffff;
-}
-.project-card:nth-of-type(1) .progress-fill {
-  background-color: #d97706;
+.confirm-btn:hover {
+  background-color: #c82333;
 }
 
-/* Mobile app project - teal/blue */
-.project-card:nth-of-type(2) {
-  border-top-color: #0891b2;
-}
-.project-card:nth-of-type(2) .project-header lucide-icon {
-  color: #0891b2;
-}
-.project-card:nth-of-type(2) .view-btn {
-  color: #0891b2;
-  border-color: #0891b2;
-  background-color: #ecfeff;
-}
-.project-card:nth-of-type(2) .view-btn:hover {
-  background-color: #0891b2;
-  color: #ffffff;
-}
-.project-card:nth-of-type(2) .progress-fill {
-  background-color: #0891b2;
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .header {
+    padding: 1rem;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  
+  .search-bar {
+    order: 3;
+    max-width: 100%;
+    margin-top: 10px;
+  }
+  
+  .projects-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  
+  .projects-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
-/* Educational platform project - purple */
-.project-card:nth-of-type(3) {
-  border-top-color: #7c3aed;
+@media (min-width: 769px) and (max-width: 1024px) {
+  .projects-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
-.project-card:nth-of-type(3) .project-header lucide-icon {
-  color: #7c3aed;
-}
-.project-card:nth-of-type(3) .view-btn {
-  color: #7c3aed;
-  border-color: #7c3aed;
-  background-color: #f5f3ff;
-}
-.project-card:nth-of-type(3) .view-btn:hover {
-  background-color: #7c3aed;
-  color: #ffffff;
-}
-.project-card:nth-of-type(3) .progress-fill {
-  background-color: #7c3aed;
-}
-.logo img {
-  height: 40px;
-}
-.dropdown {
+dropdown {
   position: relative;
   margin-left: auto; /* This will push the dropdown to the right */
   margin-right: 20px; /* Add some spacing from the search box */
@@ -448,104 +492,4 @@ main {
 
 .logout-btn:hover {
   background-color: #fff5f5 !important; /* Light red background on hover */
-  color: #e53e3e !important;
-}
-/* Confirm dialog overlay */
-.confirm-dialog-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-}
-
-/* Confirm dialog box */
-.confirm-dialog {
-  background-color: white;
-  border-radius: 8px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-  padding: 24px;
-  max-width: 450px;
-  width: 100%;
-  margin: 0 16px;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-}
-
-/* Title of the dialog */
-.confirm-dialog h3 {
-  color: #333;
-  margin-top: 0;
-  margin-bottom: 16px;
-  font-size: 20px;
-  font-weight: 600;
-}
-
-/* Message of the dialog */
-.confirm-dialog p {
-  color: #555;
-  margin-bottom: 24px;
-  font-size: 16px;
-  line-height: 1.5;
-}
-
-/* Actions container for buttons */
-.dialog-actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 12px;
-  width: 100%;
-}
-
-/* Cancel button styling */
-.cancel-btn {
-  padding: 10px 16px;
-  background-color: #f5f5f5;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  color: #333;
-  font-size: 14px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-}
-
-/* Hover effect for cancel button */
-.cancel-btn:hover {
-  background-color: #ddd;
-  color: #333;
-}
-
-/* Confirm button styling */
-.confirm-btn {
-  padding: 10px 16px;
-  background-color: #28a745;
-  border: none;
-  border-radius: 4px;
-  color: white;
-  font-size: 14px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-}
-
-/* Hover effect for confirm button */
-.confirm-btn:hover {
-  background-color: #218838;
-}
-
-/* Focus states */
-.cancel-btn:focus, .confirm-btn:focus {
-  outline: none;
-  box-shadow: 0 0 0 3px rgba(38, 139, 255, 0.4);
-}
-.project-footer {
-  display: flex;
-  gap: 8px;
-}
+  color: #e53e3e !important;}

@@ -16,10 +16,15 @@ import { ProjectDetailsComponent } from './modules/project/components/project-de
 import { ProjectListComponent } from './modules/dashboard/components/project-list/project-list.component';
 import { ProjectDetailComponent } from './modules/dashboard/components/project-detail/project-detail.component';
 import { GetStartedComponent } from './modules/getstarted/components/get-started/get-started.component';
+import { ProjectUpdateComponent } from './modules/project/components/update-project/update-project.component';
+import { DashboardHomeComponent } from './modules/dashboard/pages/dashboard-home/dashboard-home.component';
+import { roleGuard } from './core/guards/role.guard';
+import { DeveloperProfileComponent } from './modules/developer-profile/developer-profile.component';
+
 export const routes: Routes = [
- 
   { path: '', redirectTo: 'login', pathMatch: 'full' },
-  { path: 'get-started',component: GetStartedComponent,},
+  
+  // Public routes - accessible without login
   {
     path: 'login',
     component: LoginComponent,
@@ -30,30 +35,61 @@ export const routes: Routes = [
     component: RegisterComponent,
     canActivate: [isNotLoggedInGuard],
   },
-  { path: 'home', component: HomeComponent, canActivate: [isLoggedInGuard] },
+  {
+    path: 'get-started',
+    component: GetStartedComponent,
+    canActivate: [isNotLoggedInGuard]
+  },
+  
+  // Developer routes - require login and developer role
+  {
+    path: 'home', 
+    component: HomeComponent, 
+    canActivate: [isLoggedInGuard, roleGuard(['developer'])]
+  },
+  {
+    path: 'developer-profile',  // Changed from profile to developer-profile
+    component: DeveloperProfileComponent,
+    canActivate: [isLoggedInGuard, roleGuard(['developer'])],
+  },
   {
     path: 'create-project',
     component: CreateProjectComponent,
-    canActivate: [isLoggedInGuard],
+    canActivate: [isLoggedInGuard, roleGuard(['developer'])]
   },
   {
     path: 'project-details',
     component: ProjectDetailsComponent,
-    canActivate: [isLoggedInGuard],
+    canActivate: [isLoggedInGuard, roleGuard(['developer'])],
   },
-  { path: 'project-details/:id', component: ProjectDetailsComponent },
+  {
+    path: 'project-details/:id',
+    component: ProjectDetailsComponent,
+    canActivate: [isLoggedInGuard, roleGuard(['developer'])],
+  },
+  {
+    path: 'update-project/:id',
+    component: ProjectUpdateComponent,
+    canActivate: [isLoggedInGuard, roleGuard(['developer'])],
+  },
+  
+  // Admin routes - require login and admin role
   {
     path: 'dashboard',
     component: DashboardComponent,
-    canActivate: [isLoggedInGuard],
+    canActivate: [isLoggedInGuard, roleGuard(['admin'])],
     children: [
+      {
+        path: '',
+        component: DashboardHomeComponent
+      },
       { path: 'users', component: UserListComponent },
       { path: 'users/add', component: UserFormComponent },
       { path: 'users/edit/:id', component: UserFormComponent },
       { path: 'users/:id', component: UserDetailComponent },
       // Framework routes
       { path: 'frameworks', component: FrameworkListComponent },
-      { path: 'frameworks/add', component: FrameworkFormComponent }, // Added missing "add" route
+      { path: 'frameworks/add', component: FrameworkFormComponent },
       { path: 'frameworks/edit/:id', component: FrameworkFormComponent },
       { path: 'frameworks/:id', component: FrameworkDetailsComponent },
       {

@@ -550,17 +550,34 @@ export class CreateProjectComponent implements OnInit {
     });
   }
   
-  // This method is used by the template to determine if the Create Project button should be enabled
+  // Modified method to check if the Create Project button should be enabled
   isFormValid(): boolean {
-    // Always return true to enable the Create Project button
-    return true;
+    // Basic validation for both options
+    if (!this.projectForm.valid || !this.projectType || !this.selectedFramework) {
+      return false;
+    }
+    
+    // Specific validation for database option
+    if (this.modelCreationOption === 'database') {
+      // We need tables to be selected AND structures to be loaded
+      return this.selectedTables.length > 0 && this.allTablesLoaded;
+    } 
+    // Validation for manual option
+    else {
+      // Make sure we have at least one model with a valid name and fields
+      if (this.models.length === 0) {
+        return false;
+      }
+      
+      // Check if all models are valid
+      return this.models.every(model => {
+        const form = this.modelForms[model.id];
+        const modelNameValid = form.get('modelName')?.valid || false;
+        const fieldsArray = form.get('fields') as FormArray;
+        const hasFields = fieldsArray.length > 0;
+        
+        return modelNameValid && hasFields;
+      });
+    }
   }
-  
-  // This method can be removed since we're no longer checking validation before project creation
-  // but if needed elsewhere, implement a simple version
-  
-  
-  // Safe access to frameworks
-  getFrameworks(type: ProjectType | null): Framework[] {
-    return type ? this.frameworks[type] : [];
-  }}
+}

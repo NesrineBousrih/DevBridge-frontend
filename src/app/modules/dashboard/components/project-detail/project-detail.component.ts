@@ -8,7 +8,7 @@ import { ToastService } from '../../services/toast.service';
 import { catchError, take } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { Project } from '../../../../core/models/project';
-import { ChevronDown, ChevronUp, LucideAngularModule } from 'lucide-angular';
+import { LucideAngularModule } from 'lucide-angular';
 
 @Component({
   selector: 'app-project-detail',
@@ -24,8 +24,7 @@ export class ProjectDetailComponent implements OnInit {
   loading = false;
   error: string | null = null;
   showConfirmDialog = false;
-  ChevronDown=ChevronDown;
-  ChevronUp=ChevronUp;
+  expandedTables: { [key: number]: boolean } = {};
   
   constructor(
     private projectAdminService: ProjectAdminService,
@@ -43,7 +42,9 @@ export class ProjectDetailComponent implements OnInit {
   
   initForm(): void {
     this.detailForm = this.fb.group({
-      // Define your form fields here
+      project_name: [''],
+      framework: [null],
+      // Add other fields as needed
     });
   }
   
@@ -58,12 +59,18 @@ export class ProjectDetailComponent implements OnInit {
     
     this.projectId = +id;
     this.projectAdminService.getProject(this.projectId)
-      .subscribe( {
-        next:(project)=>{
+      .subscribe({
+        next: (project) => {
           this.loading = false;
           this.project = project || null;
-          if (this.project){
-          this.updateForm(this.project);
+          if (this.project) {
+            this.updateForm(this.project);
+            // Initialize all tables as collapsed
+            if (this.project.tables) {
+              this.project.tables.forEach((_, index) => {
+                this.expandedTables[index] = false;
+              });
+            }
           }
         },
         error: (error) => {
@@ -76,7 +83,11 @@ export class ProjectDetailComponent implements OnInit {
   }
   
   updateForm(project: Project): void {
-    // Update form with project data
+    this.detailForm.patchValue({
+      project_name: project.project_name,
+      framework: project.framework,
+      // Update other form fields as needed
+    });
   }
   
   onSubmit(): void {
@@ -103,7 +114,6 @@ export class ProjectDetailComponent implements OnInit {
       });
   }
 
-  // Add missing methods referenced in the template
   goBack(): void {
     this.router.navigate(['/dashboard/projects']);
   }
@@ -151,15 +161,23 @@ export class ProjectDetailComponent implements OnInit {
         )
         .subscribe((result) => {
           if (result) {
+            // Create a download link for the blob
+            const url = window.URL.createObjectURL(result);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${this.project?.project_name || 'project'}_script.py`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+            
             this.toastService.showSuccess('Script downloaded successfully');
           }
         });
     }
   }
-  expandedTables: { [key: number]: boolean } = {};
 
-toggleTable(index: number): void {
-  this.expandedTables[index] = !this.expandedTables[index];
-}
-
+  toggleTable(index: number): void {
+    this.expandedTables[index] = !this.expandedTables[index];
+  }
 }

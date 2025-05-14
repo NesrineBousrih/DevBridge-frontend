@@ -18,7 +18,8 @@ import {
   Package,
   FileCode,
   Info,
-  File
+  File,
+  Edit   // Added Edit icon for the update button
 } from 'lucide-angular';
 import { Project } from '../../../../core/models/project';
 
@@ -53,7 +54,8 @@ export class ProjectDetailsComponent implements OnInit {
   packageIcon = Package;
   infoIcon = Info;
   listIcon = List;
-  fileIcon = File; // Add fileIcon
+  fileIcon = File;
+  editIcon = Edit;  // Added Edit icon for update button
 
   constructor(
     private route: ActivatedRoute,
@@ -95,6 +97,13 @@ export class ProjectDetailsComponent implements OnInit {
         this.loading = false;
       }
     });
+  }
+
+  // Add navigate method for update button
+  navigateToUpdateProject(): void {
+    if (this.project && this.project.id) {
+      this.router.navigate(['/update-project', this.project.id]);
+    }
   }
 
   setActiveTab(tab: TabType): void {
@@ -166,5 +175,4 @@ export class ProjectDetailsComponent implements OnInit {
       downloadZipBtn.textContent = 'Download ZIP';
     }
   }
- 
 }

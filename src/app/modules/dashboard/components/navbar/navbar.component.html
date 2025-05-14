@@ -21,14 +21,7 @@
         <span>{{ user.username || 'User' }}</span>
       </button>
       <div class="dropdown-menu">
-        <a href="/profile">
-          <lucide-icon [name]="userIcon" [size]="18"></lucide-icon>
-          Profile
-        </a>
-        <a href="/settings">
-          <lucide-icon [name]="settingsIcon" [size]="18"></lucide-icon>
-          Settings
-        </a>
+        
         <button (click)="logout()" class="logout-btn">
           <lucide-icon [name]="logoutIcon" [size]="18"></lucide-icon>
           logout

@@ -1,46 +1,75 @@
-<div id="container">
-    <form [formGroup]="registerFormGroup" (ngSubmit)="register()">
-      <h3>Register</h3>
-  
-      <mat-form-field appearance="outline">
+<div class="register-container">
+  <div class="register-card">
+    <div class="register-header">
+      <div class="logo">
+        <img src="assets/devbridge-logo.png" alt="DevBridge Logo" class="logo-img">
+      </div>
+      <p>Create your account to get started</p>
+    </div>
+    
+    <form [formGroup]="registerFormGroup" (ngSubmit)="register()" class="register-form">
+      <mat-form-field appearance="outline" class="form-field">
         <mat-label>Username</mat-label>
         <input matInput formControlName="username" required>
+        <mat-icon matPrefix>person</mat-icon>
         <mat-error *ngIf="isFieldInvalid('username')">
           {{ getErrorMessage('username') }}
         </mat-error>
       </mat-form-field>
-  
-      <mat-form-field appearance="outline">
+      
+      <mat-form-field appearance="outline" class="form-field">
         <mat-label>Email</mat-label>
         <input matInput formControlName="email" required>
+        <mat-icon matPrefix>email</mat-icon>
         <mat-error *ngIf="isFieldInvalid('email')">
           {{ getErrorMessage('email') }}
         </mat-error>
       </mat-form-field>
-  
-      <mat-form-field appearance="outline">
+      
+      <mat-form-field appearance="outline" class="form-field">
         <mat-label>Password</mat-label>
-        <input matInput type="password" formControlName="password" required>
+        <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password" required>
+        <mat-icon matPrefix>lock</mat-icon>
+        <button mat-icon-button matSuffix (click)="hidePassword = !hidePassword" type="button">
+          <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+        </button>
         <mat-error *ngIf="isFieldInvalid('password')">
           {{ getErrorMessage('password') }}
         </mat-error>
       </mat-form-field>
-  
-      <mat-form-field appearance="outline">
+      
+      <mat-form-field appearance="outline" class="form-field">
         <mat-label>Confirm Password</mat-label>
-        <input matInput type="password" formControlName="confirmPassword" required>
+        <input matInput [type]="hideConfirmPassword ? 'password' : 'text'" formControlName="confirmPassword" required>
+        <mat-icon matPrefix>lock_outline</mat-icon>
+        <button mat-icon-button matSuffix (click)="hideConfirmPassword = !hideConfirmPassword" type="button">
+          <mat-icon>{{hideConfirmPassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+        </button>
         <mat-error *ngIf="isFieldInvalid('confirmPassword')">
           {{ getErrorMessage('confirmPassword') }}
         </mat-error>
       </mat-form-field>
-  
-      <button 
-        mat-flat-button 
-        [disabled]="registerFormGroup.invalid" 
-        type="submit"
-        color="primary"
-      >
-        Register
+      
+      <div class="password-requirements" *ngIf="registerFormGroup.get('password')?.dirty">
+        <p class="requirement-title">Password must contain:</p>
+        <ul>
+          <li [class.met]="hasUpperCase">Uppercase letter</li>
+          <li [class.met]="hasLowerCase">Lowercase letter</li>
+          <li [class.met]="hasNumber">Number</li>
+          <li [class.met]="hasSpecialChar">Special character</li>
+          <li [class.met]="hasMinLength">At least 6 characters</li>
+        </ul>
+      </div>
+      
+      <button mat-flat-button color="primary" class="register-button" 
+              [disabled]="registerFormGroup.invalid" type="submit">
+        Create Account
       </button>
+      
+      <div class="login-prompt">
+        <span>Already have an account?</span>
+        <a (click)="navigateToLogin()" class="login-link">Log In</a>
+      </div>
     </form>
   </div>
+</div>

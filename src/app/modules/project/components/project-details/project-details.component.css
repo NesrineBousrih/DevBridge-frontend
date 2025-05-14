@@ -493,3 +493,39 @@
     justify-content: center;
   }
 }
+/* Add these styles to your existing CSS file */
+
+.update-button-container {
+  margin-top: 20px;
+  display: flex;
+  justify-content: flex-end; /* changed from flex-start to flex-end */
+}
+
+.update-btn {
+  display: inline-flex;
+  align-items: center;
+  background-color: #10b981; /* changed to green */
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.2s;
+}
+
+.update-btn:hover {
+  transform: translateY(-2px); /* optional effect for hover */
+  box-shadow: 0 4px 8px rgba(16, 185, 129, 0.3); /* fixed syntax and green shade */
+}
+
+.update-btn .icon-container {
+  margin-right: 8px;
+  display: flex;
+  align-items: center;
+}
+.section-spacer {
+  margin-bottom: 40px;
+  width: 100%;
+  clear: both;
+}

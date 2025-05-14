@@ -5,7 +5,7 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { UserService } from '../../services/users.service';
 import { User } from '../../../../core/models/user';
 import { ToastService } from '../../services/toast.service';
-import { catchError } from 'rxjs/operators';
+import { catchError, finalize } from 'rxjs/operators';
 import { of } from 'rxjs';
 
 @Component({
@@ -20,6 +20,7 @@ export class UserFormComponent implements OnInit {
   isEditMode: boolean = false;
   userId: number | null = null;
   loading: boolean = false;
+  userTypes: string[] = ['developer', 'admin'];
 
   constructor(
     private fb: FormBuilder,
@@ -30,7 +31,9 @@ export class UserFormComponent implements OnInit {
   ) {
     this.userForm = this.fb.group({
       username: ['', [Validators.required, Validators.minLength(3)]],
-      password: ['', [Validators.required, Validators.minLength(6)]]
+      password: ['', this.isEditMode ? [] : [Validators.required, Validators.minLength(6)]],
+      user_type: ['developer', Validators.required],
+      email: ['', [Validators.required, Validators.email]]
     });
   }
 
@@ -39,6 +42,11 @@ export class UserFormComponent implements OnInit {
       if (params['id']) {
         this.isEditMode = true;
         this.userId = +params['id'];
+        
+        // Update password validation - make it optional in edit mode
+        this.userForm.get('password')?.setValidators(this.isEditMode ? [] : [Validators.required, Validators.minLength(6)]);
+        this.userForm.get('password')?.updateValueAndValidity();
+        
         this.loadUserData(this.userId);
       }
     });
@@ -53,15 +61,25 @@ export class UserFormComponent implements OnInit {
           this.toastService.showError('Failed to load user data');
           this.loading = false;
           return of(null);
-        })
+        }),
+        finalize(() => this.loading = false)
       )
       .subscribe(user => {
-        this.loading = false;
         if (user) {
+          console.log('Loaded user data:', user);
+          // Handle case when user exists but doesn't have user_type yet
+          const userType = user.user_type || 'developer';
+          
           this.userForm.patchValue({
             username: user.username,
-            password: user.password
+            user_type: userType,
+            email: user.email || ''
           });
+          
+          // For security reasons, don't populate the password field
+          // Instead, make it optional in edit mode
+          this.userForm.get('password')?.setValidators([]);
+          this.userForm.get('password')?.updateValueAndValidity();
         } else {
           this.toastService.showError('User not found');
           this.router.navigate(['/dashboard/users']);
@@ -75,39 +93,60 @@ export class UserFormComponent implements OnInit {
       const userData = this.userForm.value;
       
       if (this.isEditMode && this.userId) {
-        const updatedUser = { ...userData, id: this.userId };
+        // Handle empty password in edit mode - don't send it if empty
+        const updatedUser: User = {
+          id: this.userId,
+          username: userData.username,
+          user_type: userData.user_type,
+          email: userData.email,
+          password: ''
+        };
+        
+        // Only include password if it's provided
+        if (userData.password && userData.password.trim() !== '') {
+          updatedUser.password = userData.password;
+        }
+        
+        console.log('Sending update with data:', updatedUser);
+        
         this.userService.updateUser(updatedUser)
           .pipe(
             catchError(err => {
               console.error('Error updating user:', err);
               this.toastService.showError('Failed to update user');
-              this.loading = false;
               return of(null);
-            })
+            }),
+            finalize(() => this.loading = false)
           )
-          .subscribe(() => {
-            this.loading = false;
-            this.toastService.showSuccess('User updated successfully');
-            this.router.navigate(['/dashboard/users']);
+          .subscribe(response => {
+            if (response) {
+              console.log('Update successful:', response);
+              this.toastService.showSuccess('User updated successfully');
+              this.router.navigate(['/dashboard/users']);
+            }
           });
       } else {
         const newUser = new User(
           userData.username,
-          userData.password
+          userData.password,
+          userData.user_type,
+          userData.email
         );
+        
         this.userService.addUser(newUser)
           .pipe(
             catchError(err => {
               console.error('Error adding user:', err);
-              
-              this.loading = false;
+              this.toastService.showError('Failed to add user');
               return of(null);
-            })
+            }),
+            finalize(() => this.loading = false)
           )
-          .subscribe(() => {
-            this.loading = false;
-            this.toastService.showSuccess('User added successfully');
-            this.router.navigate(['/dashboard/users']);
+          .subscribe(response => {
+            if (response) {
+              this.toastService.showSuccess('User added successfully');
+              this.router.navigate(['/dashboard/users']);
+            }
           });
       }
     } else {

@@ -9,6 +9,7 @@ import {
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBarModule, MatSnackBar } from '@angular/material/snack-bar';
 import { RegisterService, RegisterCredentials } from '../../services/register.service';
 import { Router } from '@angular/router';
@@ -23,6 +24,7 @@ import { CommonModule } from '@angular/common';
     MatFormFieldModule, 
     MatButtonModule, 
     MatInputModule,
+    MatIconModule,
     MatSnackBarModule,
     CommonModule
   ],
@@ -37,6 +39,15 @@ export class RegisterComponent implements OnDestroy {
   private registerSubscription: Subscription | null = null;
 
   registerFormGroup: FormGroup;
+  hidePassword = true;
+  hideConfirmPassword = true;
+  
+  // Password requirement checks
+  hasUpperCase = false;
+  hasLowerCase = false;
+  hasNumber = false;
+  hasSpecialChar = false;
+  hasMinLength = false;
 
   constructor() {
     this.registerFormGroup = this.formBuilder.group({
@@ -55,6 +66,20 @@ export class RegisterComponent implements OnDestroy {
       ]],
       confirmPassword: ['', [Validators.required]]
     }, { validators: this.passwordMatchValidator });
+
+    // Subscribe to password changes to update requirements
+    this.registerFormGroup.get('password')?.valueChanges.subscribe(value => {
+      this.updatePasswordRequirements(value);
+    });
+  }
+
+  // Update password requirement checks
+  updatePasswordRequirements(value: string) {
+    this.hasUpperCase = /[A-Z]/.test(value);
+    this.hasLowerCase = /[a-z]/.test(value);
+    this.hasNumber = /[0-9]/.test(value);
+    this.hasSpecialChar = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/.test(value);
+    this.hasMinLength = value?.length >= 6;
   }
 
   // Custom validator for password strength
@@ -103,6 +128,10 @@ export class RegisterComponent implements OnDestroy {
 
     if (control.hasError('required')) {
       return `${this.capitalizeFirstLetter(controlName)} is required`;
+    }
+
+    if (controlName === 'username' && control.hasError('minlength')) {
+      return 'Username must be at least 3 characters long';
     }
 
     if (controlName === 'email' && control.hasError('email')) {

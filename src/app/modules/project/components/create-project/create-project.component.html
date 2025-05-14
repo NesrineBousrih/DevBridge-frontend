@@ -80,7 +80,7 @@
 
       <div *ngIf="!isLoading && !errorMessage" class="framework-grid">
         <div
-          *ngFor="let framework of getFrameworks(projectType)"
+          *ngFor="let framework of frameworks[projectType!]"
           class="framework-card"
           [ngClass]="{ selected: selectedFramework?.id === framework.id }"
           (click)="selectFramework(framework)"
@@ -97,7 +97,7 @@
 
       <div
         *ngIf="
-          !isLoading && !errorMessage && getFrameworks(projectType).length === 0
+          !isLoading && !errorMessage && frameworks[projectType!]?.length === 0
         "
         class="no-frameworks"
       >
@@ -111,6 +111,28 @@
   <p class="step-description">
     Add fields to your data model for {{ selectedFramework?.name }}
   </p>
+
+  <!-- Project Name Field - Moved outside of both options -->
+  <form [formGroup]="projectForm" class="project-name-container">
+    <div class="form-group">
+      <label for="projectName">Project Name</label>
+      <input
+        type="text"
+        id="projectName"
+        formControlName="projectName"
+        placeholder="Enter project name"
+      />
+      <div
+        *ngIf="
+          projectForm.get('projectName')?.invalid &&
+          projectForm.get('projectName')?.touched
+        "
+        class="validation-error"
+      >
+        Project name is required
+      </div>
+    </div>
+  </form>
 
   <!-- Model creation options -->
   <div class="model-creation-options">
@@ -132,27 +154,6 @@
 
 <!-- Option 1: Manual Model Definition -->
 <div *ngIf="modelCreationOption === 'manual'">
-  <form [formGroup]="projectForm">
-    <div class="form-group">
-      <label for="projectName">Project Name</label>
-      <input
-        type="text"
-        id="projectName"
-        formControlName="projectName"
-        placeholder="Enter project name"
-      />
-      <div
-        *ngIf="
-          projectForm.get('projectName')?.invalid &&
-          projectForm.get('projectName')?.touched
-        "
-        class="validation-error"
-      >
-        Project name is required
-      </div>
-    </div>
-  </form>
-
   <!-- Models Management Section -->
   <div class="models-container">
     <div class="models-header">
@@ -272,9 +273,8 @@
       No models defined yet. Click "Add Model" to get started.
     </div>
   </div>
-
- 
 </div>
+
   <!-- Option 2: Database Connection -->
 <div *ngIf="modelCreationOption === 'database'">
   <form [formGroup]="dbConnectionForm" class="db-connection-form">
@@ -424,32 +424,12 @@
       *ngIf="selectedTables.length > 0" 
       type="button" 
       class="load-tables-btn"
+      [disabled]="isLoading"
       (click)="loadTableStructures()"
     >
-      Load Table Structures
+      <span *ngIf="!isLoading">Load Table Structures</span>
+      <div *ngIf="isLoading" class="spinner-small"></div>
     </button>
-  </div>
-
-  <!-- Project Name Input (appears after table selection) -->
-  <div *ngIf="selectedTables.length > 0 && allTablesLoaded" class="form-group project-name-input">
-    <form [formGroup]="projectForm">
-      <label for="projectName">Project Name</label>
-      <input
-        type="text"
-        id="projectName"
-        formControlName="projectName"
-        placeholder="Enter project name"
-      />
-      <div
-  *ngIf="
-    projectForm.get('projectName')?.invalid &&
-    projectForm.get('projectName')?.touched
-  "
-  class="validation-error"
->
-  Project name is required
-</div>
-    </form>
   </div>
 
   <!-- Tables Summary (after structure loaded) -->
@@ -470,6 +450,8 @@
     </div>
   </div>
 </div>
+
+  <!-- Create Project Button - Now properly checks all required conditions -->
   <div class="create-project-btn-container">
     <button
       type="button"
