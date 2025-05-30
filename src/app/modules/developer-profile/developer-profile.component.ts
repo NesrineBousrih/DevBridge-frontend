@@ -47,7 +47,10 @@ export class DeveloperProfileComponent implements OnInit {
       profilePhoto: [''],
       currentPassword: [''],
       newPassword: [''],
-      confirmPassword: ['']
+      confirmPassword: [''],
+      // Add developer-specific form controls
+      expertise: [''],
+      experience_years: [null] // Changed from experienceYears to match backend
     });
   }
 
@@ -89,7 +92,10 @@ export class DeveloperProfileComponent implements OnInit {
           this.userId = user.id || null;
           this.profileForm.patchValue({
             username: user.username || '',
-            email: user.email || ''
+            email: user.email || '',
+            // Add developer-specific fields
+            expertise: user.expertise || '',
+            experience_years: user.experience_years || null // Changed to match backend field name
           });
         } else {
           this.showToast('User not found', 'error');
@@ -149,7 +155,8 @@ export class DeveloperProfileComponent implements OnInit {
     return this.currentUser.username.charAt(0).toUpperCase();
   }
 
-  onSubmit(): void {
+      onSubmit(): void {
+    console.log('Form controls:', Object.keys(this.profileForm.controls));
     if (this.profileForm.invalid) {
       this.markFormGroupTouched(this.profileForm);
       this.showToast('Please fix the validation errors', 'warning');
@@ -176,6 +183,8 @@ export class DeveloperProfileComponent implements OnInit {
     const emailChanged = this.profileForm.get('email')?.value !== this.currentUser?.email;
     const passwordChanged = this.changePassword && this.profileForm.get('newPassword')?.value;
     const photoChanged = !!this.profilePhotoFile;
+    const expertiseChanged = this.profileForm.get('expertise')?.value !== this.currentUser?.expertise;
+    const experienceYearsChanged = this.profileForm.get('experience_years')?.value !== this.currentUser?.experience_years;
 
     // Create FormData for file upload
     const formData = new FormData();
@@ -183,6 +192,12 @@ export class DeveloperProfileComponent implements OnInit {
     formData.append('username', this.profileForm.get('username')?.value);
     formData.append('email', this.profileForm.get('email')?.value);
     formData.append('user_type', this.currentUser?.user_type || 'developer');
+    
+    // Add developer-specific fields to formData if user is a developer
+    if (this.currentUser?.user_type === 'developer') {
+      formData.append('expertise', this.profileForm.get('expertise')?.value || '');
+      formData.append('experience_years', this.profileForm.get('experience_years')?.value || '0');
+    }
     
     if (this.profilePhotoFile) {
       formData.append('profile_photo', this.profilePhotoFile);
@@ -221,9 +236,13 @@ export class DeveloperProfileComponent implements OnInit {
           if (photoChanged) {
             this.showToast('Profile photo updated successfully');
           }
+          if (expertiseChanged || experienceYearsChanged) {
+            this.showToast('Developer information updated successfully');
+          }
           
           // If nothing specific was changed, show a generic success message
-          if (!usernameChanged && !emailChanged && !passwordChanged && !photoChanged) {
+          if (!usernameChanged && !emailChanged && !passwordChanged && !photoChanged && 
+              !expertiseChanged && !experienceYearsChanged) {
             this.showToast('Profile updated successfully');
           }
           

@@ -99,12 +99,14 @@ export class UserFormComponent implements OnInit {
           username: userData.username,
           user_type: userData.user_type,
           email: userData.email,
-          password: ''
+          password: '',
+          current_password: ''
         };
         
         // Only include password if it's provided
         if (userData.password && userData.password.trim() !== '') {
           updatedUser.password = userData.password;
+          updatedUser.current_password = userData.password;
         }
         
         console.log('Sending update with data:', updatedUser);
