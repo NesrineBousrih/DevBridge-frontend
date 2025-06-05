@@ -8,7 +8,7 @@ import { Project } from '../../../core/models/project';
   providedIn: 'root'
 })
 export class ProjectDetailsAdminService {
-  private apiUrl = 'http://127.0.0.1:8000/api/projects/'; // Fixed URL with trailing slash
+  private apiUrl = 'http://127.0.0.1:8000/api/projects/'; 
 
   constructor(private http: HttpClient) { }
   
